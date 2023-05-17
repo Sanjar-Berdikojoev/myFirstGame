@@ -96,7 +96,7 @@ public class Main extends SimpleApplication {
     }
     @Override
     public void simpleUpdate(float tpf) {
-        //TODO: add update code
+
         setLimitForCamera(cam);
         Vector3f rayBegin = new Vector3f(cam.getWorldCoordinates(midDisplayLocation, 0.0f));
         cursorRay = new Ray(rayBegin, cam.getDirection());
@@ -106,7 +106,6 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleRender(RenderManager rm) {
-        //TODO: add render code
     }
     private void setMyConfigurationsForCamera(InputManager inputManager){
         inputManager.addMapping(CameraInput.FLYCAM_RISE, new KeyTrigger(KeyInput.KEY_SPACE));

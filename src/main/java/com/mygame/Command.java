@@ -137,18 +137,6 @@ public class Command {
                         neighbourCell.setColor(currentPlayer.getColor());
                         currentPlayer.setTowers(currentPlayer.getTowers() + 1);
                         currentCell.setHeight(1);
-
-                        for (Cell cell : neighbourCells) {
-                            if (cell.getHeight() == 0)
-                                cell.getModel().setMaterial(resources.getMaterial(0));
-                        }
-
-                        if (neighbourCell.getHeight() < 2)
-                            return;
-                        else {
-                            Field.setCurrentCell(neighbourCell);
-                            selectTower(Field.getCurrentCell());
-                        }
                     }
                     else {
                         neighbourCell.getModel().attachChild(resources.getModel(currentCell.getHeight() - neighbourCell.getHeight()).clone());
@@ -168,19 +156,8 @@ public class Command {
                                 break;
                             }
                         }
-
-                        for (Cell cell : neighbourCells) {
-                            if (cell.getHeight() == 0)
-                                cell.getModel().setMaterial(resources.getMaterial(0));
-                        }
-
-                        if (neighbourCell.getHeight() < 2)
-                            return;
-                        else {
-                            Field.setCurrentCell(neighbourCell);
-                            selectTower(Field.getCurrentCell());
-                        }
                     }
+                    checkIfPossibleToContinueSpreading(neighbourCell, neighbourCells);
                 }
                 else if(currentCell.getHeight() < neighbourCell.getHeight()) {
 
@@ -193,18 +170,20 @@ public class Command {
                     neighbourCell.setHeight(neighbourCell.getHeight() - currentCell.getHeight()); // add +1 for height ?
                     currentCell.setHeight(1);
 
+                    checkIfPossibleToContinueSpreading(neighbourCell, neighbourCells);
+
                     break;
                 }
                 else if(currentCell.getHeight() == neighbourCell.getHeight()) {
 
                     Random random = new Random();
                     int num = random.nextInt(2);
-                    switch(num){
+                    switch(num) {
                         case 0 -> {
-                            currentCell.getModel().detachChildAt(0);
-                            currentCell.getModel().attachChild(resources.getModel(1).clone());
-                            currentCell.getModel().setMaterial(resources.getMaterial(playerIndex + 1));
-                            neighbourCell.getModel().detachChildAt(0);
+                            currentCell.getModel().detachChildAt(0); //
+                            currentCell.getModel().attachChild(resources.getModel(1).clone()); //
+                            currentCell.getModel().setMaterial(resources.getMaterial(playerIndex + 1)); //
+                            neighbourCell.getModel().detachChildAt(0); //
                             neighbourCell.getModel().attachChild(resources.getModel(1).clone());
                             neighbourCell.getModel().getChild(0).setMaterial(resources.getMaterial(playerIndex + 1));
                             neighbourCell.setHeight(1); // add +1 for height ?
@@ -213,8 +192,10 @@ public class Command {
                             currentPlayer.setTowers(currentPlayer.getTowers() + 1);
 
                             for (int i = 0; i < Main.getField().getPlayers().length; i++) {
+
                                 if(Main.getField().getPlayers()[i].getColor() == neighbourCell.getColor()) {
                                     Main.getField().getPlayers()[i].setTowers(Main.getField().getPlayers()[i].getTowers() - 1);
+
                                     if(Main.getField().getPlayers()[i].getTowers() == 0) {
                                         Main.getField().getPlayers()[i].setActive(false);
                                         Settings.setInactivePlayers(Settings.getInactivePlayers() + 1);
@@ -234,11 +215,21 @@ public class Command {
                             currentCell.setHeight(1);
                         }
                     }
+                    checkIfPossibleToContinueSpreading(neighbourCell, neighbourCells);
                 }
             }
         }
     }
+    public static void checkIfPossibleToContinueSpreading(Cell currentCell, ArrayList<Cell> neighbourCells) {
 
+        for (Cell cell : neighbourCells) {
+            if (cell.getHeight() == 0)
+                cell.getModel().setMaterial(Main.getResources().getMaterial(0));
+        }
+
+        Field.setCurrentCell(currentCell);
+        selectTower(Field.getCurrentCell());
+    }
     public static void addPointForTower(Cell currentCell) {
 
         if(currentCell == null)

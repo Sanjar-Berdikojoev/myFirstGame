@@ -100,6 +100,10 @@ public class MyMouseListener {
                                 }
                             }
                             case 4 -> {
+
+                                if(Settings.getInactivePlayers() > 2)
+                                    return;
+
                                 Main.getField().getPlayers()[Field.getCurrentPlayerIndex()].setActive(false);
                                 Settings.setInactivePlayers(Settings.getInactivePlayers() + 1);
 
