@@ -1,11 +1,14 @@
 package com.mygame;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.asset.AssetInfo;
+import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioNode;
-import com.jme3.input.CameraInput;
-import com.jme3.input.InputManager;
+import com.jme3.font.BitmapFont;
+import com.jme3.font.BitmapText;
+import com.jme3.font.plugins.BitmapFontLoader;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
@@ -14,18 +17,12 @@ import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.niftygui.NiftyJmeDisplay;
-import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import de.lessvoid.nifty.Nifty;
 
-/**
- * This is the Main Class of your Game. You should only do initialization here.
- * Move your Logic into AppStates or Controls
- * @author normenhansen
- */
 public class Main extends SimpleApplication {
     private static Resources resources;
     private Vector2f midDisplayLocation;
@@ -90,53 +87,21 @@ public class Main extends SimpleApplication {
         resources.setModelsAndMaterials();
         midDisplayLocation = new Vector2f(settings.getWidth() / 2f , settings.getHeight() / 2f);
         field = new Field(assetManager, rootNode, Settings.ROWS, Settings.COLUMNS);
-        setMyConfigurationsForCamera(inputManager);
+        Settings.setMyConfigurationsForCamera(inputManager, flyCam);
         field.createField();
         field.setPlayers(Settings.getNumberOfPlayers());
     }
     @Override
     public void simpleUpdate(float tpf) {
 
-        setLimitForCamera(cam);
+        Settings.setLimitForCamera(cam);
         Vector3f rayBegin = new Vector3f(cam.getWorldCoordinates(midDisplayLocation, 0.0f));
         cursorRay = new Ray(rayBegin, cam.getDirection());
         /*if(Settings.getCurrentPhase() == 1)
             Command.selectTowerForPhase2();*/
     }
-
     @Override
     public void simpleRender(RenderManager rm) {
-    }
-    private void setMyConfigurationsForCamera(InputManager inputManager){
-        inputManager.addMapping(CameraInput.FLYCAM_RISE, new KeyTrigger(KeyInput.KEY_SPACE));
-        inputManager.addMapping(CameraInput.FLYCAM_LOWER, new KeyTrigger(KeyInput.KEY_LSHIFT));
-        inputManager.addMapping("Run", new KeyTrigger(KeyInput.KEY_W));
-        inputManager.addListener((ActionListener) (String name, boolean isPressed, float tpf) -> {
-            if (!(name.equals("Run") && isPressed)) {
-                flyCam.setMoveSpeed(3.0f);
-                return;
-            }
-            long currentTime = System.currentTimeMillis();
-            if (currentTime - Settings.getLastWPressTime() < 500)
-                flyCam.setMoveSpeed(6.0f);
-            Settings.setLastWPressTime(currentTime);
-        }, "Run");
-    }
-
-    private void setLimitForCamera(Camera camera){
-        Vector3f cameraLocation = camera.getLocation();
-
-        float groundHeight = 4.5f;
-        if(cameraLocation.y < groundHeight){
-            cameraLocation.y = groundHeight;
-            camera.setLocation(cameraLocation);
-        }
-
-        float ceilingHeight = 20f;
-        if(cameraLocation.y > ceilingHeight){
-            cameraLocation.y = ceilingHeight;
-            camera.setLocation(cameraLocation);
-        }
     }
     public static Resources getResources() {
         return resources;

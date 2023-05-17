@@ -1,5 +1,14 @@
 package com.mygame;
 
+import com.jme3.input.CameraInput;
+import com.jme3.input.FlyByCamera;
+import com.jme3.input.InputManager;
+import com.jme3.input.KeyInput;
+import com.jme3.input.controls.ActionListener;
+import com.jme3.input.controls.KeyTrigger;
+import com.jme3.math.Vector3f;
+import com.jme3.renderer.Camera;
+
 public class Settings {
     public final static int MAX_HEIGHT = 8;
     //public final static int MIN_HEIGHT = 1;
@@ -13,6 +22,38 @@ public class Settings {
     private static int numberOfPlayers = 4;
     private static int currentCommand = 0;
     private static int currentPhase = 0;
+    public static void setMyConfigurationsForCamera(InputManager inputManager, FlyByCamera flyCam){
+        inputManager.addMapping(CameraInput.FLYCAM_RISE, new KeyTrigger(KeyInput.KEY_SPACE));
+        inputManager.addMapping(CameraInput.FLYCAM_LOWER, new KeyTrigger(KeyInput.KEY_LSHIFT));
+        inputManager.addMapping("Run", new KeyTrigger(KeyInput.KEY_W));
+        inputManager.addListener((ActionListener) (String name, boolean isPressed, float tpf) -> {
+            if (!(name.equals("Run") && isPressed)) {
+                flyCam.setMoveSpeed(3.0f);
+                return;
+            }
+            long currentTime = System.currentTimeMillis();
+            if (currentTime - Settings.getLastWPressTime() < 500)
+                flyCam.setMoveSpeed(6.0f);
+            Settings.setLastWPressTime(currentTime);
+        }, "Run");
+    }
+
+    public static void setLimitForCamera(Camera camera){
+        Vector3f cameraLocation = camera.getLocation();
+
+        float groundHeight = 4.5f;
+        if(cameraLocation.y < groundHeight){
+            cameraLocation.y = groundHeight;
+            camera.setLocation(cameraLocation);
+        }
+
+        float ceilingHeight = 20f;
+        if(cameraLocation.y > ceilingHeight){
+            cameraLocation.y = ceilingHeight;
+            camera.setLocation(cameraLocation);
+        }
+    }
+
     public static int getNumberOfPlayers() {
         return numberOfPlayers;
     }

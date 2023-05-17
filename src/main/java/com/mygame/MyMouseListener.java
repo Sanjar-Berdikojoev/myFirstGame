@@ -42,8 +42,10 @@ public class MyMouseListener {
             @Override
             public void onMouseButtonEvent(MouseButtonEvent evt) {
                 if (evt.isPressed()) {
+
                     if(!Main.getField().getPlayers()[Field.getCurrentPlayerIndex()].isActive())
                         return;
+
                     if (evt.getButtonIndex() == MouseInput.BUTTON_LEFT) {
                         switch (Settings.getCurrentCommand()) {
                             case 1 -> {
@@ -53,14 +55,11 @@ public class MyMouseListener {
                                     Command.addPointForTower(Command.getTower());
                             }
                             case 2 -> {
-                                if (Settings.getCurrentPhase() == 1) {
-                                    Cell currentCell = Command.getTower();
-                                    Command.addMaxPointsForTower(currentCell);
-                                }
+                                if (Settings.getCurrentPhase() == 1)
+                                    Command.addMaxPointsForTower(Command.getTower());
                             }
                         }
                     } else if (evt.getButtonIndex() == MouseInput.BUTTON_RIGHT) {
-
                         switch (Settings.getCurrentCommand()) {
 
                             case 1 -> {

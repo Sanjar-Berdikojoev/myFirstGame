@@ -252,30 +252,13 @@ public class Command {
         currentCell.getModel().getChild(0).setMaterial(resources.getMaterial(playerIndex + 1));
         currentCell.setMaterial(resources.getMaterial(playerIndex + 1));
     }
-
     public static void addMaxPointsForTower(Cell currentCell) {
 
         if(currentCell == null)
             return;
 
-        Resources resources = Main.getResources();
-        int playerIndex = Field.getCurrentPlayerIndex();
-        Player currentPlayer = Main.getField().getPlayers()[playerIndex];
-
-        if(currentPlayer.getPoints() <= 0)
-            return;
-
-        if(currentCell.getHeight() == Settings.MAX_HEIGHT)
-            return;
-
-        while(currentPlayer.getPoints() > 0 && currentCell.getHeight() != Settings.MAX_HEIGHT) {
-            currentPlayer.setPoints(currentPlayer.getPoints() - 1);
-            currentCell.setHeight(currentCell.getHeight() + 1);
-            currentCell.getModel().detachChildAt(0);
-            currentCell.getModel().attachChild(resources.getModel(currentCell.getHeight()).clone());
-            currentCell.getModel().getChild(0).setMaterial(resources.getMaterial(playerIndex + 1));
-            currentCell.setMaterial(resources.getMaterial(playerIndex + 1));
-        }
+        while(Main.getField().getPlayers()[Field.getCurrentPlayerIndex()].getPoints() > 0 && currentCell.getHeight() != Settings.MAX_HEIGHT)
+            addPointForTower(currentCell);
     }
 
     public static Cell getTower(){
