@@ -251,6 +251,9 @@ public class Command {
         currentCell.getModel().attachChild(resources.getModel(currentCell.getHeight()).clone());
         currentCell.getModel().getChild(0).setMaterial(resources.getMaterial(playerIndex + 1));
         currentCell.setMaterial(resources.getMaterial(playerIndex + 1));
+
+        if(currentPlayer.getPoints() == 0)
+            passMove();
     }
     public static void addMaxPointsForTower(Cell currentCell) {
 
@@ -299,6 +302,13 @@ public class Command {
         searchNeighbourCells(currentCell);
     }
 
+    public static void passMove() {
+        Main.getNifty().fromXml("Interface/ControlGui_FirstPhase.xml", "inventory");
+        Field.setCurrentPlayerIndex((Field.getCurrentPlayerIndex() + 1) % Settings.getNumberOfPlayers());
+        while(!Main.getField().getPlayers()[Field.getCurrentPlayerIndex()].isActive())
+            Field.setCurrentPlayerIndex((Field.getCurrentPlayerIndex() + 1) % Settings.getNumberOfPlayers());
+        Settings.setCurrentPhase(0);
+    }
     public static void selectTowerForPhase2() {
 
         Resources resources = Main.getResources();

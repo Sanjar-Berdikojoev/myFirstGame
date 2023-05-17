@@ -72,7 +72,6 @@ public class MyMouseListener {
                                 int playerIndex = Field.getCurrentPlayerIndex();
                                 int playerPoints = Main.getField().getPlayers()[playerIndex].getPoints();
                                 int numOfTowers = Main.getField().getPlayers()[playerIndex].getTowers();
-                                int numOfPlayers = Settings.getNumberOfPlayers();
 
                                 if (Settings.getCurrentPhase() == 0) {
 
@@ -89,14 +88,8 @@ public class MyMouseListener {
                                     Settings.setCurrentCommand(5);
                                     Settings.setCurrentPhase(1);
                                 }
-                                else {
-
-                                    Main.getNifty().fromXml("Interface/ControlGui_FirstPhase.xml", "inventory");
-                                    Field.setCurrentPlayerIndex((playerIndex + 1) % numOfPlayers);
-                                    while(!Main.getField().getPlayers()[Field.getCurrentPlayerIndex()].isActive())
-                                        Field.setCurrentPlayerIndex((Field.getCurrentPlayerIndex() + 1) % Settings.getNumberOfPlayers());
-                                    Settings.setCurrentPhase(0);
-                                }
+                                else
+                                    Command.passMove();
                             }
                             case 4 -> {
 
