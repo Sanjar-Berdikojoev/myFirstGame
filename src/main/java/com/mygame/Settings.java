@@ -15,8 +15,8 @@ public class Settings {
     public final static float SCALE_COEFFICIENT = 0.05f;
     public final static int NUMBER_OF_MATERIALS = 10;
     //public final static int NUMBER_OF_PHASES = 2;
-    public final static int ROWS = 21;
-    public final static int COLUMNS = 21;
+    public final static int ROWS = 7;
+    public final static int COLUMNS = 7;
     private static long lastWPressTime = 0;
     private static int inactivePlayers = 0;
     private static int numberOfPlayers = 4;
@@ -47,9 +47,33 @@ public class Settings {
             camera.setLocation(cameraLocation);
         }
 
-        float ceilingHeight = 20f;
+        float ceilingHeight = 14f;
         if(cameraLocation.y > ceilingHeight){
             cameraLocation.y = ceilingHeight;
+            camera.setLocation(cameraLocation);
+        }
+
+        float leftWall = -2.0f;
+        if(cameraLocation.x < leftWall){
+            cameraLocation.x = leftWall;
+            camera.setLocation(cameraLocation);
+        }
+
+        float rightWall = Main.getField().getCells()[Settings.ROWS - 1][Settings.COLUMNS - 1].getVector().x + 4.0f;
+        if(cameraLocation.x > rightWall){
+            cameraLocation.x = rightWall;
+            camera.setLocation(cameraLocation);
+        }
+
+        float frontWall = -2.0f;
+        if(cameraLocation.z < frontWall){
+            cameraLocation.z = frontWall;
+            camera.setLocation(cameraLocation);
+        }
+
+        float backWall = Main.getField().getCells()[Settings.ROWS - 1][Settings.COLUMNS - 1].getVector().z + 2.0f;
+        if(cameraLocation.z > backWall){
+            cameraLocation.z = backWall;
             camera.setLocation(cameraLocation);
         }
     }
