@@ -24,6 +24,10 @@ public class Command {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
                 Cell currentCell = Main.getField().getCells()[i][j];
+
+                if(currentCell == null)
+                    return;
+
                 BoundingVolume boundingVolume = currentCell.getModel().getWorldBound();
                 if(boundingVolume.intersects(ray) && currentCell.getHeight() > 1) {
                     if(currentCell.getColor() != currentPlayer.getColor())
@@ -146,18 +150,10 @@ public class Command {
                         currentPlayer.setTowers(currentPlayer.getTowers() + 1);
                         currentCell.setHeight(1);
 
-                        for (int i = 0; i < Main.getField().getPlayers().length; i++) {
-                            if(Main.getField().getPlayers()[i].getColor() == neighbourCell.getColor()) {
-                                Main.getField().getPlayers()[i].setTowers(Main.getField().getPlayers()[i].getTowers() - 1);
-                                if(Main.getField().getPlayers()[i].getTowers() == 0) {
-                                    Main.getField().getPlayers()[i].setActive(false);
-                                    Settings.setInactivePlayers(Settings.getInactivePlayers() + 1);
-                                }
-                                break;
-                            }
-                        }
+                        decreaseTowersNum(neighbourCell);
                     }
                     checkIfPossibleToContinueSpreading(neighbourCell, neighbourCells);
+                    checkIfNoMoves();
                 }
                 else if(currentCell.getHeight() < neighbourCell.getHeight()) {
 
@@ -171,6 +167,7 @@ public class Command {
                     currentCell.setHeight(1);
 
                     checkIfPossibleToContinueSpreading(neighbourCell, neighbourCells);
+                    checkIfNoMoves();
 
                     break;
                 }
@@ -186,23 +183,12 @@ public class Command {
                             neighbourCell.getModel().detachChildAt(0); //
                             neighbourCell.getModel().attachChild(resources.getModel(1).clone());
                             neighbourCell.getModel().getChild(0).setMaterial(resources.getMaterial(playerIndex + 1));
+                            neighbourCell.setMaterial(resources.getMaterial(playerIndex + 1));
                             neighbourCell.setHeight(1); // add +1 for height ?
                             currentCell.setHeight(1);
-                            neighbourCell.setColor(currentPlayer.getColor());
                             currentPlayer.setTowers(currentPlayer.getTowers() + 1);
-
-                            for (int i = 0; i < Main.getField().getPlayers().length; i++) {
-
-                                if(Main.getField().getPlayers()[i].getColor() == neighbourCell.getColor()) {
-                                    Main.getField().getPlayers()[i].setTowers(Main.getField().getPlayers()[i].getTowers() - 1);
-
-                                    if(Main.getField().getPlayers()[i].getTowers() == 0) {
-                                        Main.getField().getPlayers()[i].setActive(false);
-                                        Settings.setInactivePlayers(Settings.getInactivePlayers() + 1);
-                                    }
-                                    break;
-                                }
-                            }
+                            decreaseTowersNum(neighbourCell);
+                            neighbourCell.setColor(currentPlayer.getColor());
                         }
                         case 1 -> {
                             currentCell.getModel().detachChildAt(0);
@@ -216,10 +202,12 @@ public class Command {
                         }
                     }
                     checkIfPossibleToContinueSpreading(neighbourCell, neighbourCells);
+                    checkIfNoMoves();
                 }
             }
         }
     }
+
     public static void checkIfPossibleToContinueSpreading(Cell currentCell, ArrayList<Cell> neighbourCells) {
 
         for (Cell cell : neighbourCells) {
@@ -230,6 +218,7 @@ public class Command {
         Field.setCurrentCell(currentCell);
         selectTower(Field.getCurrentCell());
     }
+
     public static void addPointForTower(Cell currentCell) {
 
         if(currentCell == null)
@@ -249,8 +238,7 @@ public class Command {
         currentCell.setHeight(currentCell.getHeight() + 1);
         currentCell.getModel().detachChildAt(0);
         currentCell.getModel().attachChild(resources.getModel(currentCell.getHeight()).clone());
-        currentCell.getModel().getChild(0).setMaterial(resources.getMaterial(playerIndex + 1));
-        currentCell.setMaterial(resources.getMaterial(playerIndex + 1));
+        currentCell.getModel().getChild(0).setMaterial(currentCell.getMaterial());
 
         if(currentPlayer.getPoints() == 0)
             passMove();
@@ -276,9 +264,8 @@ public class Command {
                 if (boundingVolume.intersects(Main.getCursorRay()) && currentCell.getHeight() > 0) {
                     if (currentCell.getColor() != currentPlayer.getColor())
                         return null;
-                    else {
+                    else
                         return currentCell;
-                    }
                 }
             }
         }
@@ -309,6 +296,107 @@ public class Command {
             Field.setCurrentPlayerIndex((Field.getCurrentPlayerIndex() + 1) % Settings.getNumberOfPlayers());
         Settings.setCurrentPhase(0);
     }
+
+    public static void decreaseTowersNum(Cell neighbourCell) {
+        for (int i = 0; i < Main.getField().getPlayers().length; i++) {
+
+            if(Main.getField().getPlayers()[i].getColor() == neighbourCell.getColor()) {
+                Main.getField().getPlayers()[i].setTowers(Main.getField().getPlayers()[i].getTowers() - 1);
+
+                if(Main.getField().getPlayers()[i].getTowers() == 0) {
+                    Main.getField().getPlayers()[i].setActive(false);
+                    Settings.setInactivePlayers(Settings.getInactivePlayers() + 1);
+                }
+                break;
+            }
+        }
+    }
+
+    public static void checkIfNoMoves() {
+
+        boolean noMoves = true;
+
+        Player currentPlayer = Main.getField().getPlayers()[Field.getCurrentPlayerIndex()];
+        Cell[][] cells = Main.getField().getCells();
+        for (int i = 0; i < Settings.ROWS; i++) {
+            for (int j = 0; j < Settings.COLUMNS; j++) {
+                Cell currentCell = cells[i][j];
+
+                if(currentCell.getColor() == currentPlayer.getColor()) {
+                    if(currentCell.getHeight() > 1) {
+                        for (int x = i - 1; x <= i + 1; x++) {
+                            for (int y = j - 1; y <= j + 1; y++) {
+
+                                if(x < 0 || y < 0 || x >= Settings.ROWS || y >= Settings.COLUMNS)
+                                    continue;
+
+                                if((x == i && y == j))
+                                    continue;
+
+                                Cell neighbourCell = Main.getField().getCells()[x][y];
+
+                                if(neighbourCell.getColor() == currentPlayer.getColor())
+                                    continue;
+
+                                float lineLength = currentCell.getVector().distance(neighbourCell.getVector());
+
+                                if(lineLength > 2.5f)
+                                    continue;
+
+                                if(neighbourCell.getColor() != currentPlayer.getColor()) {
+                                    noMoves = false;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if(noMoves) {
+            int playerIndex = Field.getCurrentPlayerIndex();
+            int playerPoints = Main.getField().getPlayers()[playerIndex].getPoints();
+            int numOfTowers = Main.getField().getPlayers()[playerIndex].getTowers();
+
+            if(Field.getCurrentCell() != null)
+                Field.getCurrentCell().getModel().getChild(0).setMaterial(Field.getCurrentCell().getMaterial());
+
+            for (Cell cell : Field.getNeighbourCells()) {
+                if(cell != null)
+                    cell.getModel().getChild(0).setMaterial(cell.getMaterial());
+            }
+
+            Main.getNifty().fromXml("Interface/ControlGui_SecondPhase.xml", "inventory");
+            Main.getField().getPlayers()[playerIndex].setPoints(playerPoints + numOfTowers);
+            Settings.setCurrentCommand(5);
+            Settings.setCurrentPhase(1);
+        }
+    }
+    public static void distributePoints() {
+
+        Player currentPlayer = Main.getField().getPlayers()[Field.getCurrentPlayerIndex()];
+
+        Cell[][] cells = Main.getField().getCells();
+        while(currentPlayer.getPoints() > 0) {
+            for (int i = 0; i < Settings.ROWS; i++) {
+                for (int j = 0; j < Settings.COLUMNS; j++) {
+                    Cell currentCell = cells[i][j];
+
+                    if(currentPlayer.getPoints() == 0)
+                        return;
+
+                    if(currentCell.getColor() == currentPlayer.getColor() && currentCell.getHeight() != Settings.MAX_HEIGHT) {
+                        currentPlayer.setPoints(currentPlayer.getPoints() - 1);
+                        currentCell.setHeight(currentCell.getHeight() + 1);
+                        currentCell.getModel().detachChildAt(0);
+                        currentCell.getModel().attachChild(Main.getResources().getModel(currentCell.getHeight()).clone());
+                        currentCell.getModel().getChild(0).setMaterial(currentCell.getMaterial());
+                    }
+                }
+            }
+        }
+    }
+
     public static void selectTowerForPhase2() {
 
         Resources resources = Main.getResources();

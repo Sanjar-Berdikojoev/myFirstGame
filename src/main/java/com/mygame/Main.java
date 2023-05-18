@@ -7,15 +7,12 @@ import com.jme3.audio.AudioNode;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
-import com.jme3.material.Material;
 import com.jme3.math.*;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.queue.RenderQueue;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.shape.Quad;
 import de.lessvoid.nifty.Nifty;
 
 public class Main extends SimpleApplication {
@@ -77,7 +74,6 @@ public class Main extends SimpleApplication {
         guiController.createMappings();
         inputManager.addListener(guiController.getActionListener(), "Button_1", "Button_2", "Button_3", "Button_4", "Button_0");
 
-        //viewPort.setBackgroundColor(new ColorRGBA(0.1f, 0.2f, 0.3f, 1.0f));
         resources = new Resources(assetManager);
         resources.setModelsAndMaterials();
         midDisplayLocation = new Vector2f(settings.getWidth() / 2f , settings.getHeight() / 2f);

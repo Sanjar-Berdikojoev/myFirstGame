@@ -51,34 +51,40 @@ public class Field {
             zPos += 1.75f;
         }
     }
+
+    public void optimizeField() {
+        for (int i = 0; i < Settings.COLUMNS; i+=2)
+            cells[Settings.ROWS - 1][i] = null;
+    }
+
     public void setPlayers(int numberOfPlayers){
         for (int i = 0; i < numberOfPlayers; i++)
             players[i] = new Player(Color.values()[i], true, 1, 0);
         setTowers();
     }
     public void setTowers(){
-        cells[1][0].getModel().detachAllChildren();
+        cells[1][0].getModel().detachChildAt(0);
         cells[1][0].getModel().attachChild(resources.getModel(2).clone());
         cells[1][0].getModel().setMaterial(resources.getMaterial(1));
         cells[1][0].setColor(Color.RED);
         cells[1][0].setHeight(2);
         cells[1][0].setMaterial(resources.getMaterial(1));
 
-        cells[2][columns - 1].getModel().detachAllChildren();
+        cells[2][columns - 1].getModel().detachChildAt(0);
         cells[2][columns - 1].getModel().attachChild(resources.getModel(2).clone());
         cells[2][columns - 1].getModel().setMaterial(resources.getMaterial(2));
         cells[2][columns - 1].setColor(Color.BLUE);
         cells[2][columns - 1].setHeight(2);
         cells[2][columns - 1].setMaterial(resources.getMaterial(2));
 
-        cells[rows - 2][0].getModel().detachAllChildren();
+        cells[rows - 2][0].getModel().detachChildAt(0);
         cells[rows - 2][0].getModel().attachChild(resources.getModel(2).clone());
         cells[rows - 2][0].getModel().setMaterial(resources.getMaterial(4));
         cells[rows - 2][0].setColor(Color.GREEN);
         cells[rows - 2][0].setHeight(2);
         cells[rows - 2][0].setMaterial(resources.getMaterial(4));
 
-        cells[rows - 3][columns - 1].getModel().detachAllChildren();
+        cells[rows - 3][columns - 1].getModel().detachChildAt(0);
         cells[rows - 3][columns - 1].getModel().attachChild(resources.getModel(2).clone());
         cells[rows - 3][columns - 1].getModel().setMaterial(resources.getMaterial(3));
         cells[rows - 3][columns - 1].setColor(Color.YELLOW);

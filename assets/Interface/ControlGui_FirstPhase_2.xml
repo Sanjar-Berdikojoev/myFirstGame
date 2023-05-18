@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty xmlns="http://nifty-gui.lessvoid.com/nifty-gui" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://raw.githubusercontent.com/void256/nifty-gui/1.4/nifty-core/src/main/resources/nifty.xsd">
-    <!-- +++++++++++++++++++++++++++++++++++++++ -->
-    <!-- start screen -->
-    <!-- +++++++++++++++++++++++++++++++++++++++ -->
     <screen id="inventory" controller="mygame.Main">
-        <layer id="hotbar" childLayout="absolute" backgroundColor="#0000">
-            <panel childLayout="horizontal">
+        <layer id="hotBar" childLayout="center" valign="bottom" backgroundColor="#0000" width="100%" height="100%">
+            <panel align="center" valign="bottom" childLayout="horizontal">
                 <image id="slot1" filename="Models/HotBars/Selector.png" width="100" height="100"/>
                 <image id="slot2" filename="Models/HotBars/Empty_Slot(chosen).png" width="100" height="100"/>
                 <image id="slot3" filename="Models/HotBars/Next_Phase.png" width="100" height="100"/>
@@ -14,7 +11,7 @@
         </layer>
         <layer id="cross" childLayout="absolute" backgroundColor="#0000">
             <panel childLayout="center" width="100%" height="100%">
-                    <image id="black_cross" filename="Models/WhiteCross.png" width="30" height="30"/>
+                <image id="white_cross" filename="Models/White_Cross.png" width="30" height="30"/>
             </panel>
         </layer>
     </screen>

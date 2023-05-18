@@ -88,8 +88,11 @@ public class MyMouseListener {
                                     Settings.setCurrentCommand(5);
                                     Settings.setCurrentPhase(1);
                                 }
-                                else
+                                else {
+                                    if(Main.getField().getPlayers()[playerIndex].getPoints() >= 0)
+                                        Command.distributePoints();
                                     Command.passMove();
+                                }
                             }
                             case 4 -> {
 
