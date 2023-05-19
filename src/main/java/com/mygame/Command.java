@@ -146,11 +146,10 @@ public class Command {
                         neighbourCell.getModel().attachChild(resources.getModel(currentCell.getHeight() - neighbourCell.getHeight()).clone());
                         neighbourCell.getModel().getChild(0).setMaterial(resources.getMaterial(playerIndex + 1));
                         neighbourCell.setHeight(currentCell.getHeight() - neighbourCell.getHeight());
-                        neighbourCell.setColor(currentPlayer.getColor());
                         currentPlayer.setTowers(currentPlayer.getTowers() + 1);
                         currentCell.setHeight(1);
-
                         decreaseTowersNum(neighbourCell);
+                        neighbourCell.setColor(currentPlayer.getColor());
                     }
                     checkIfPossibleToContinueSpreading(neighbourCell, neighbourCells);
                     checkIfNoMoves();
@@ -290,21 +289,21 @@ public class Command {
     }
 
     public static void passMove() {
+        int numOfPlayers = Settings.getNumberOfPlayers();
         Main.getNifty().fromXml("Interface/ControlGui_FirstPhase.xml", "inventory");
-        Field.setCurrentPlayerIndex((Field.getCurrentPlayerIndex() + 1) % Settings.getNumberOfPlayers());
+        Field.setCurrentPlayerIndex((Field.getCurrentPlayerIndex() + 1) % numOfPlayers);
         while(!Main.getField().getPlayers()[Field.getCurrentPlayerIndex()].isActive())
-            Field.setCurrentPlayerIndex((Field.getCurrentPlayerIndex() + 1) % Settings.getNumberOfPlayers());
+            Field.setCurrentPlayerIndex((Field.getCurrentPlayerIndex() + 1) % numOfPlayers);
         Settings.setCurrentPhase(0);
     }
 
     public static void decreaseTowersNum(Cell neighbourCell) {
-        for (int i = 0; i < Main.getField().getPlayers().length; i++) {
-
-            if(Main.getField().getPlayers()[i].getColor() == neighbourCell.getColor()) {
-                Main.getField().getPlayers()[i].setTowers(Main.getField().getPlayers()[i].getTowers() - 1);
-
-                if(Main.getField().getPlayers()[i].getTowers() == 0) {
-                    Main.getField().getPlayers()[i].setActive(false);
+        Player[] players = Main.getField().getPlayers();
+        for (Player currentPlayer : players) {
+            if (currentPlayer.getColor() == neighbourCell.getColor()) {
+                currentPlayer.setTowers(currentPlayer.getTowers() - 1);
+                if (currentPlayer.getTowers() == 0) {
+                    currentPlayer.setActive(false);
                     Settings.setInactivePlayers(Settings.getInactivePlayers() + 1);
                 }
                 break;
@@ -392,6 +391,8 @@ public class Command {
                         currentCell.getModel().attachChild(Main.getResources().getModel(currentCell.getHeight()).clone());
                         currentCell.getModel().getChild(0).setMaterial(currentCell.getMaterial());
                     }
+                    else if(currentCell.getColor() == currentPlayer.getColor() && currentCell.getHeight() == Settings.MAX_HEIGHT)
+                        return;
                 }
             }
         }

@@ -89,9 +89,10 @@ public class MyMouseListener {
                                     Settings.setCurrentPhase(1);
                                 }
                                 else {
-                                    if(Main.getField().getPlayers()[playerIndex].getPoints() >= 0)
+                                    if(Main.getField().getPlayers()[playerIndex].getPoints() > 0)
                                         Command.distributePoints();
                                     Command.passMove();
+                                    Command.checkIfNoMoves();
                                 }
                             }
                             case 4 -> {
@@ -102,7 +103,7 @@ public class MyMouseListener {
                                 Main.getField().getPlayers()[Field.getCurrentPlayerIndex()].setActive(false);
                                 Settings.setInactivePlayers(Settings.getInactivePlayers() + 1);
 
-                                while(!Main.getField().getPlayers()[Field.getCurrentPlayerIndex()].isActive() && Settings.getInactivePlayers() < 4)
+                                while(!Main.getField().getPlayers()[Field.getCurrentPlayerIndex()].isActive())
                                     Field.setCurrentPlayerIndex((Field.getCurrentPlayerIndex() + 1) % Settings.getNumberOfPlayers());
                                 Main.getNifty().fromXml("Interface/ControlGui_FirstPhase.xml", "inventory");
                                 Settings.setCurrentPhase(0);
