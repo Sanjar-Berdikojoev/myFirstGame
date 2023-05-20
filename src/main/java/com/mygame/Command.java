@@ -82,6 +82,9 @@ public class Command {
 
                 Cell neighbourCell = Main.getField().getCells()[x][y];
 
+                if(neighbourCell == null)
+                    continue;
+
                 if(neighbourCell.getColor() == currentPlayer.getColor())
                     continue;
 
@@ -373,6 +376,7 @@ public class Command {
     }
     public static void distributePoints() {
 
+        int counter = 0;
         Player currentPlayer = Main.getField().getPlayers()[Field.getCurrentPlayerIndex()];
 
         Cell[][] cells = Main.getField().getCells();
@@ -384,50 +388,23 @@ public class Command {
                     if(currentPlayer.getPoints() == 0)
                         return;
 
-                    if(currentCell.getColor() == currentPlayer.getColor() && currentCell.getHeight() != Settings.MAX_HEIGHT) {
+                    if(currentCell.getHeight() == Settings.MAX_HEIGHT && currentCell.getColor() == currentPlayer.getColor()) {
+                        counter++;
+                        continue;
+                    }
+
+                    if(counter == currentPlayer.getTowers())
+                        return;
+
+                    if(currentCell.getColor() == currentPlayer.getColor()) {
                         currentPlayer.setPoints(currentPlayer.getPoints() - 1);
                         currentCell.setHeight(currentCell.getHeight() + 1);
                         currentCell.getModel().detachChildAt(0);
                         currentCell.getModel().attachChild(Main.getResources().getModel(currentCell.getHeight()).clone());
                         currentCell.getModel().getChild(0).setMaterial(currentCell.getMaterial());
+                        counter++;
                     }
-                    else if(currentCell.getColor() == currentPlayer.getColor() && currentCell.getHeight() == Settings.MAX_HEIGHT)
-                        return;
                 }
-            }
-        }
-    }
-
-    public static void selectTowerForPhase2() {
-
-        Resources resources = Main.getResources();
-        Ray ray = Main.getCursorRay();
-        int rows = Settings.ROWS;
-        int columns = Settings.COLUMNS;
-
-        int playerIndex = Field.getCurrentPlayerIndex();
-        Player currentPlayer = Main.getField().getPlayers()[playerIndex];
-
-        if(currentPlayer.getPoints() == 0)
-            return;
-
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
-                Cell currentCell = Main.getField().getCells()[i][j];
-                BoundingVolume boundingVolume = currentCell.getModel().getWorldBound();
-                if(boundingVolume.intersects(ray) && currentCell.getHeight() > 0) {
-                    if(currentCell.getColor() != currentPlayer.getColor())
-                        return;
-                    switch (currentCell.getColor()) {
-                        case RED -> currentCell.getModel().setMaterial(resources.getMaterial(5));
-                        case BLUE -> currentCell.getModel().setMaterial(resources.getMaterial(6));
-                        case YELLOW -> currentCell.getModel().setMaterial(resources.getMaterial(7));
-                        case GREEN -> currentCell.getModel().setMaterial(resources.getMaterial(8));
-                    }
-                    return;
-                }
-                else
-                    currentCell.getModel().setMaterial(currentCell.getMaterial());
             }
         }
     }

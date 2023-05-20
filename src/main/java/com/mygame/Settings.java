@@ -11,10 +11,8 @@ import com.jme3.renderer.Camera;
 
 public class Settings {
     public final static int MAX_HEIGHT = 8;
-    //public final static int MIN_HEIGHT = 1;
     public final static float SCALE_COEFFICIENT = 0.05f;
     public final static int NUMBER_OF_MATERIALS = 10;
-    //public final static int NUMBER_OF_PHASES = 2;
     public final static int ROWS = 7;
     public final static int COLUMNS = 7;
     private static long lastWPressTime = 0;

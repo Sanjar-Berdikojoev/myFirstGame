@@ -88,8 +88,6 @@ public class Main extends SimpleApplication {
         Settings.setLimitForCamera(cam);
         Vector3f rayBegin = new Vector3f(cam.getWorldCoordinates(midDisplayLocation, 0.0f));
         cursorRay = new Ray(rayBegin, cam.getDirection());
-        /*if(Settings.getCurrentPhase() == 1)
-            Command.selectTowerForPhase2();*/
     }
     @Override
     public void simpleRender(RenderManager rm) {
