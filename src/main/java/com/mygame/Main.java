@@ -4,6 +4,8 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioNode;
+import com.jme3.font.BitmapFont;
+import com.jme3.font.BitmapText;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
@@ -12,6 +14,7 @@ import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.RenderManager;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.screen.Screen;
+import java.util.Objects;
 
 public class Main extends SimpleApplication {
     private static Resources resources;
@@ -20,6 +23,7 @@ public class Main extends SimpleApplication {
     private static Field field;
     private static Ray cursorRay;
     private static GUIController controller;
+    BitmapText text;
     public static void main(String[] args) {
         Main app = new Main();
         app.start();
@@ -40,7 +44,7 @@ public class Main extends SimpleApplication {
         Screen screen = nifty.getCurrentScreen();
         controller = new GUIController(inputManager);
         nifty.registerScreenController(controller);
-        controller.bind(nifty, screen);
+        controller.bind(nifty, Objects.requireNonNull(screen));
 
         AudioNode audioNode = new AudioNode(assetManager, "Sounds/StarSummer.ogg", AudioData.DataType.Buffer);
         audioNode.setPositional(false);
@@ -76,9 +80,12 @@ public class Main extends SimpleApplication {
         controller.createMappings();
         Settings.setMyConfigurationsForCamera(inputManager, flyCam);
 
-        MyMouseListener myMouseListener = new MyMouseListener(inputManager);
-        myMouseListener.addMouseListener();
+        CustomMouseListener customMouseListener = new CustomMouseListener(inputManager);
+        customMouseListener.addMouseListener();
         inputManager.addListener(controller.getActionListener(), "Button_1", "Button_2", "Button_3", "Button_4", "Button_0");
+
+        setDisplayStatView(false);
+        setDisplayFps(true);
     }
     @Override
     public void simpleUpdate(float tpf) {
@@ -86,6 +93,7 @@ public class Main extends SimpleApplication {
         Settings.setLimitForCamera(cam);
         Vector3f rayBegin = new Vector3f(cam.getWorldCoordinates(midDisplayLocation, 0.0f));
         cursorRay = new Ray(rayBegin, cam.getDirection());
+        field.setTextsOverTowers(cam);
     }
     @Override
     public void simpleRender(RenderManager rm) {

@@ -11,7 +11,7 @@ public class Command {
     public static void onRightMouseButtonClick() {
 
         if(Field.getCurrentCell() != null)
-            Field.getCurrentCell().getModel().getChild(0).setMaterial(Field.getCurrentCell().getMaterial());
+            Field.getCurrentCell().model.getChild(0).setMaterial(Field.getCurrentCell().getMaterial());
 
         Resources resources = Main.getResources();
         Ray ray = Main.getCursorRay();
@@ -28,25 +28,25 @@ public class Command {
                 if(currentCell == null)
                     return;
 
-                BoundingVolume boundingVolume = currentCell.getModel().getWorldBound();
+                BoundingVolume boundingVolume = currentCell.model.getWorldBound();
                 if(boundingVolume.intersects(ray) && currentCell.getHeight() > 1) {
                     if(currentCell.getColor() != currentPlayer.getColor())
                         return;
                     switch (currentCell.getColor()) {
-                            case RED -> currentCell.getModel().setMaterial(resources.getMaterial(5));
-                            case BLUE -> currentCell.getModel().setMaterial(resources.getMaterial(6));
-                            case YELLOW -> currentCell.getModel().setMaterial(resources.getMaterial(7));
-                            case GREEN -> currentCell.getModel().setMaterial(resources.getMaterial(8));
+                            case RED -> currentCell.model.setMaterial(resources.getMaterial(5));
+                            case BLUE -> currentCell.model.setMaterial(resources.getMaterial(6));
+                            case YELLOW -> currentCell.model.setMaterial(resources.getMaterial(7));
+                            case GREEN -> currentCell.model.setMaterial(resources.getMaterial(8));
                     }
                     isSelected = true;
                     Field.setCurrentCell(currentCell);
                     return;
                 }
                 else {
-                    currentCell.getModel().setMaterial(currentCell.getMaterial());
+                    currentCell.model.setMaterial(currentCell.getMaterial());
                     isSelected = false;
                     for (int k = 0; k < Field.getNeighbourCells().size(); k++)
-                        Field.getNeighbourCells().get(k).getModel().getChild(0).setMaterial(Field.getNeighbourCells().get(k).getMaterial());
+                        Field.getNeighbourCells().get(k).model.getChild(0).setMaterial(Field.getNeighbourCells().get(k).getMaterial());
                 }
             }
         }
@@ -65,8 +65,8 @@ public class Command {
         if(currentCell.getColor() != currentPlayer.getColor())
             return;
 
-        int i = currentCell.getI();
-        int j = currentCell.getJ();
+        int i = currentCell.i;
+        int j = currentCell.j;
 
         int rows = Settings.ROWS;
         int columns = Settings.COLUMNS;
@@ -88,7 +88,7 @@ public class Command {
                 if(neighbourCell.getColor() == currentPlayer.getColor())
                     continue;
 
-                float lineLength = currentCell.getVector().distance(neighbourCell.getVector());
+                float lineLength = currentCell.vector.distance(neighbourCell.vector);
 
                 if(lineLength > 2.5f)
                     continue;
@@ -96,11 +96,10 @@ public class Command {
                 neighbourCells.add(neighbourCell);
 
                 if(neighbourCell.getHeight() == 0 && isSelected)
-                    neighbourCell.getModel().getChild(0).setMaterial(resources.getMaterial(9));
+                    neighbourCell.model.getChild(0).setMaterial(resources.getMaterial(9));
             }
         }
     }
-
     public static void setNewTower(ArrayList <Cell> neighbourCells, Cell currentCell) {
 
         if(currentCell == null)
@@ -118,36 +117,36 @@ public class Command {
         if(currentCell.getColor() != currentPlayer.getColor())
             return;
 
-        ArrayList<Cell> neighbourCellsCopy = new ArrayList<>(neighbourCells); //Conca....
+        ArrayList<Cell> neighbourCellsCopy = new ArrayList<>(neighbourCells);
 
         for (Cell neighbourCell : neighbourCellsCopy) {
 
             if (neighbourCell == null)
                 continue;
 
-            BoundingVolume boundingVolume = neighbourCell.getModel().getWorldBound();
+            BoundingVolume boundingVolume = neighbourCell.model.getWorldBound();
 
             if (boundingVolume.intersects(ray)) {
 
                 if(currentCell.getHeight() > neighbourCell.getHeight()) {
 
-                    currentCell.getModel().detachChildAt(0);
-                    currentCell.getModel().attachChild(resources.getModel(1).clone());
-                    currentCell.getModel().setMaterial(resources.getMaterial(playerIndex + 1));
-                    neighbourCell.getModel().detachChildAt(0);
+                    currentCell.model.detachChildAt(0);
+                    currentCell.model.attachChild(resources.getModel(1).clone());
+                    currentCell.model.setMaterial(resources.getMaterial(playerIndex + 1));
+                    neighbourCell.model.detachChildAt(0);
                     neighbourCell.setMaterial(resources.getMaterial(playerIndex + 1));
 
                     if(neighbourCell.getHeight() == 0) {
-                        neighbourCell.getModel().attachChild(resources.getModel(currentCell.getHeight() - 1).clone());
-                        neighbourCell.getModel().getChild(0).setMaterial(resources.getMaterial(playerIndex + 1));
+                        neighbourCell.model.attachChild(resources.getModel(currentCell.getHeight() - 1).clone());
+                        neighbourCell.model.getChild(0).setMaterial(resources.getMaterial(playerIndex + 1));
                         neighbourCell.setHeight(currentCell.getHeight() - 1);
                         neighbourCell.setColor(currentPlayer.getColor());
                         currentPlayer.setTowers(currentPlayer.getTowers() + 1);
                         currentCell.setHeight(1);
                     }
                     else {
-                        neighbourCell.getModel().attachChild(resources.getModel(currentCell.getHeight() - neighbourCell.getHeight()).clone());
-                        neighbourCell.getModel().getChild(0).setMaterial(resources.getMaterial(playerIndex + 1));
+                        neighbourCell.model.attachChild(resources.getModel(currentCell.getHeight() - neighbourCell.getHeight()).clone());
+                        neighbourCell.model.getChild(0).setMaterial(resources.getMaterial(playerIndex + 1));
                         neighbourCell.setHeight(currentCell.getHeight() - neighbourCell.getHeight());
                         currentPlayer.setTowers(currentPlayer.getTowers() + 1);
                         currentCell.setHeight(1);
@@ -159,13 +158,13 @@ public class Command {
                 }
                 else if(currentCell.getHeight() < neighbourCell.getHeight()) {
 
-                    currentCell.getModel().detachChildAt(0);
-                    currentCell.getModel().attachChild(resources.getModel(1).clone());
-                    currentCell.getModel().setMaterial(resources.getMaterial(playerIndex + 1));
-                    neighbourCell.getModel().detachChildAt(0);
-                    neighbourCell.getModel().attachChild(resources.getModel(neighbourCell.getHeight() - currentCell.getHeight()).clone()); // OutOfBound
-                    neighbourCell.getModel().getChild(0).setMaterial(neighbourCell.getMaterial());
-                    neighbourCell.setHeight(neighbourCell.getHeight() - currentCell.getHeight()); // add +1 for height ?
+                    currentCell.model.detachChildAt(0);
+                    currentCell.model.attachChild(resources.getModel(1).clone());
+                    currentCell.model.setMaterial(resources.getMaterial(playerIndex + 1));
+                    neighbourCell.model.detachChildAt(0);
+                    neighbourCell.model.attachChild(resources.getModel(neighbourCell.getHeight() - currentCell.getHeight()).clone());
+                    neighbourCell.model.getChild(0).setMaterial(neighbourCell.getMaterial());
+                    neighbourCell.setHeight(neighbourCell.getHeight() - currentCell.getHeight());
                     currentCell.setHeight(1);
 
                     checkIfPossibleToContinueSpreading(neighbourCell, neighbourCells);
@@ -179,27 +178,27 @@ public class Command {
                     int num = random.nextInt(2);
                     switch(num) {
                         case 0 -> {
-                            currentCell.getModel().detachChildAt(0); //
-                            currentCell.getModel().attachChild(resources.getModel(1).clone()); //
-                            currentCell.getModel().setMaterial(resources.getMaterial(playerIndex + 1)); //
-                            neighbourCell.getModel().detachChildAt(0); //
-                            neighbourCell.getModel().attachChild(resources.getModel(1).clone());
-                            neighbourCell.getModel().getChild(0).setMaterial(resources.getMaterial(playerIndex + 1));
+                            currentCell.model.detachChildAt(0);
+                            currentCell.model.attachChild(resources.getModel(1).clone());
+                            currentCell.model.setMaterial(resources.getMaterial(playerIndex + 1));
+                            neighbourCell.model.detachChildAt(0);
+                            neighbourCell.model.attachChild(resources.getModel(1).clone());
+                            neighbourCell.model.getChild(0).setMaterial(resources.getMaterial(playerIndex + 1));
                             neighbourCell.setMaterial(resources.getMaterial(playerIndex + 1));
-                            neighbourCell.setHeight(1); // add +1 for height ?
+                            neighbourCell.setHeight(1);
                             currentCell.setHeight(1);
                             currentPlayer.setTowers(currentPlayer.getTowers() + 1);
                             decreaseTowersNum(neighbourCell);
                             neighbourCell.setColor(currentPlayer.getColor());
                         }
                         case 1 -> {
-                            currentCell.getModel().detachChildAt(0);
-                            currentCell.getModel().attachChild(resources.getModel(1).clone());
-                            currentCell.getModel().setMaterial(resources.getMaterial(playerIndex + 1));
-                            neighbourCell.getModel().detachChildAt(0);
-                            neighbourCell.getModel().attachChild(resources.getModel(1).clone());
-                            neighbourCell.getModel().getChild(0).setMaterial(neighbourCell.getMaterial());
-                            neighbourCell.setHeight(1); // add +1 for height ?
+                            currentCell.model.detachChildAt(0);
+                            currentCell.model.attachChild(resources.getModel(1).clone());
+                            currentCell.model.setMaterial(resources.getMaterial(playerIndex + 1));
+                            neighbourCell.model.detachChildAt(0);
+                            neighbourCell.model.attachChild(resources.getModel(1).clone());
+                            neighbourCell.model.getChild(0).setMaterial(neighbourCell.getMaterial());
+                            neighbourCell.setHeight(1);
                             currentCell.setHeight(1);
                         }
                     }
@@ -214,7 +213,7 @@ public class Command {
 
         for (Cell cell : neighbourCells) {
             if (cell.getHeight() == 0)
-                cell.getModel().setMaterial(Main.getResources().getMaterial(0));
+                cell.model.setMaterial(Main.getResources().getMaterial(0));
         }
 
         Field.setCurrentCell(currentCell);
@@ -238,9 +237,9 @@ public class Command {
 
         currentPlayer.setPoints(currentPlayer.getPoints() - 1);
         currentCell.setHeight(currentCell.getHeight() + 1);
-        currentCell.getModel().detachChildAt(0);
-        currentCell.getModel().attachChild(resources.getModel(currentCell.getHeight()).clone());
-        currentCell.getModel().getChild(0).setMaterial(currentCell.getMaterial());
+        currentCell.model.detachChildAt(0);
+        currentCell.model.attachChild(resources.getModel(currentCell.getHeight()).clone());
+        currentCell.model.getChild(0).setMaterial(currentCell.getMaterial());
 
         if(currentPlayer.getPoints() == 0)
             passMove();
@@ -262,7 +261,7 @@ public class Command {
         for (int i = 0; i < Settings.ROWS; i++) {
             for (int j = 0; j < Settings.COLUMNS; j++) {
                 Cell currentCell = Main.getField().getCells()[i][j];
-                BoundingVolume boundingVolume = currentCell.getModel().getWorldBound();
+                BoundingVolume boundingVolume = currentCell.model.getWorldBound();
                 if (boundingVolume.intersects(Main.getCursorRay()) && currentCell.getHeight() > 0) {
                     if (currentCell.getColor() != currentPlayer.getColor())
                         return null;
@@ -283,10 +282,10 @@ public class Command {
             return;
 
         switch (currentCell.getColor()) {
-            case RED -> currentCell.getModel().setMaterial(Main.getResources().getMaterial(5));
-            case BLUE -> currentCell.getModel().setMaterial(Main.getResources().getMaterial(6));
-            case YELLOW -> currentCell.getModel().setMaterial(Main.getResources().getMaterial(7));
-            case GREEN -> currentCell.getModel().setMaterial(Main.getResources().getMaterial(8));
+            case RED -> currentCell.model.setMaterial(Main.getResources().getMaterial(5));
+            case BLUE -> currentCell.model.setMaterial(Main.getResources().getMaterial(6));
+            case YELLOW -> currentCell.model.setMaterial(Main.getResources().getMaterial(7));
+            case GREEN -> currentCell.model.setMaterial(Main.getResources().getMaterial(8));
         }
         searchNeighbourCells(currentCell);
     }
@@ -329,7 +328,7 @@ public class Command {
                         for (int x = i - 1; x <= i + 1; x++) {
                             for (int y = j - 1; y <= j + 1; y++) {
 
-                                if(x < 0 || y < 0 || x >= Settings.ROWS || y >= Settings.COLUMNS)
+                                if(x < 0 || y < 0 || x == Settings.ROWS || y == Settings.COLUMNS)
                                     continue;
 
                                 if((x == i && y == j))
@@ -340,7 +339,7 @@ public class Command {
                                 if(neighbourCell.getColor() == currentPlayer.getColor())
                                     continue;
 
-                                float lineLength = currentCell.getVector().distance(neighbourCell.getVector());
+                                float lineLength = currentCell.vector.distance(neighbourCell.vector);
 
                                 if(lineLength > 2.5f)
                                     continue;
@@ -361,11 +360,11 @@ public class Command {
             int numOfTowers = Main.getField().getPlayers()[playerIndex].getTowers();
 
             if(Field.getCurrentCell() != null)
-                Field.getCurrentCell().getModel().getChild(0).setMaterial(Field.getCurrentCell().getMaterial());
+                Field.getCurrentCell().model.getChild(0).setMaterial(Field.getCurrentCell().getMaterial());
 
             for (Cell cell : Field.getNeighbourCells()) {
                 if(cell != null)
-                    cell.getModel().getChild(0).setMaterial(cell.getMaterial());
+                    cell.model.getChild(0).setMaterial(cell.getMaterial());
             }
 
             Main.getController().changeImage(1,0);
@@ -399,13 +398,22 @@ public class Command {
                     if(currentCell.getColor() == currentPlayer.getColor()) {
                         currentPlayer.setPoints(currentPlayer.getPoints() - 1);
                         currentCell.setHeight(currentCell.getHeight() + 1);
-                        currentCell.getModel().detachChildAt(0);
-                        currentCell.getModel().attachChild(Main.getResources().getModel(currentCell.getHeight()).clone());
-                        currentCell.getModel().getChild(0).setMaterial(currentCell.getMaterial());
+                        currentCell.model.detachChildAt(0);
+                        currentCell.model.attachChild(Main.getResources().getModel(currentCell.getHeight()).clone());
+                        currentCell.model.getChild(0).setMaterial(currentCell.getMaterial());
                         counter++;
                     }
                 }
             }
+        }
+    }
+    public static void deselectCells() {
+        if(Field.getCurrentCell() != null)
+            Field.getCurrentCell().model.getChild(0).setMaterial(Field.getCurrentCell().getMaterial());
+
+        for (Cell cell : Field.getNeighbourCells()) {
+            if(cell != null)
+                cell.model.getChild(0).setMaterial(cell.getMaterial());
         }
     }
 }

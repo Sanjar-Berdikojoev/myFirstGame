@@ -61,7 +61,7 @@ public class Settings {
             camera.setLocation(cameraLocation);
         }
 
-        float rightWall = Main.getField().getCells()[Settings.ROWS - 1][Settings.COLUMNS - 1].getVector().x + 4.5f;
+        float rightWall = Main.getField().getCells()[Settings.ROWS - 1][Settings.COLUMNS - 1].vector.x + 4.5f;
         if(cameraLocation.x > rightWall){
             cameraLocation.x = rightWall;
             camera.setLocation(cameraLocation);
@@ -73,7 +73,7 @@ public class Settings {
             camera.setLocation(cameraLocation);
         }
 
-        float backWall = Main.getField().getCells()[Settings.ROWS - 1][Settings.COLUMNS - 1].getVector().z + 3.0f;
+        float backWall = Main.getField().getCells()[Settings.ROWS - 1][Settings.COLUMNS - 1].vector.z + 3.0f;
         if(cameraLocation.z > backWall){
             cameraLocation.z = backWall;
             camera.setLocation(cameraLocation);

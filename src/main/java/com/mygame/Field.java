@@ -1,11 +1,19 @@
 package com.mygame;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.bounding.BoundingVolume;
+import com.jme3.font.BitmapFont;
+import com.jme3.font.BitmapText;
 import com.jme3.material.Material;
+import com.jme3.material.RenderState;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.Camera;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Quad;
 import com.jme3.texture.Texture;
 
@@ -14,7 +22,7 @@ import java.util.Random;
 
 public class Field {
     private static Cell currentCell = null;
-    private static final ArrayList<Cell> NEIGHBOUR_CELLS = new ArrayList<>();
+    public static final ArrayList<Cell> NEIGHBOUR_CELLS = new ArrayList<>();
     private final int rows;
     private final int columns;
     private final AssetManager assetManager;
@@ -51,7 +59,7 @@ public class Field {
                 node.setMaterial(resources.getMaterial(0));
                 node.setLocalTranslation(cellPos);
                 cells[i][j] = new Cell(0, cellPos, Color.GRAY, resources.getMaterial(0), node, i, j);
-                rootNode.attachChild(cells[i][j].getModel());
+                rootNode.attachChild(cells[i][j].model);
             }
             xPos = 0.0f;
             zPos += 1.75f;
@@ -60,12 +68,47 @@ public class Field {
     public void setPlayers(int numberOfPlayers) {
 
         Random random = new Random();
-        for (int i = 0; i < numberOfPlayers; i++) {
+        for(int i = 0; i < numberOfPlayers; i++) {
             int index = random.nextInt(100000);
             PLAYERS[i] = new Player("Guest" + index, Color.values()[i], true, 1, 0);
         }
         setTowers();
         setFloor();
+    }
+    public void setTextsOverTowers(Camera camera) {
+        BitmapFont font = assetManager.loadFont("Interface/Fonts/Default.fnt");
+        BitmapText[][] texts = new BitmapText[rows][columns];
+        for (Spatial child : rootNode.getChildren()) {
+            if (child instanceof BitmapText) {
+                rootNode.detachChild(child);
+            }
+        }
+        for(int i = 0; i < rows; i++) {
+            for(int j = 0; j < columns; j++) {
+                Cell currentCell = cells[i][j];
+                if(currentCell.getHeight() > 0) {
+                    BoundingVolume boundingVolume = currentCell.model.getWorldBound();
+                    Vector3f modelCenter = boundingVolume.getCenter().clone();
+                    float modelHeight = currentCell.model.getWorldScale().y;
+                    Vector3f textPosition = modelCenter.add(-0.065f, modelHeight + 0.3f, 0);
+
+                    texts[i][j] = new BitmapText(font);
+                    texts[i][j].setLocalTranslation(textPosition);
+                    texts[i][j].setSize(0.25f);
+                    texts[i][j].setColor(ColorRGBA.White);
+                    texts[i][j].setText(Integer.toString(currentCell.getHeight()));
+
+                    Vector3f cameraPosition = camera.getLocation();
+                    Vector3f direction = cameraPosition.subtract(texts[i][j].getLocalTranslation()).multLocal(1, 0, 1).normalizeLocal();
+                    Quaternion rotation = new Quaternion();
+                    rotation.lookAt(direction, Vector3f.UNIT_Y);
+
+                    texts[i][j].setLocalRotation(rotation);
+                    texts[i][j].setColor(ColorRGBA.White);
+                    rootNode.attachChild(texts[i][j]);
+                }
+            }
+        }
     }
     private void setFloor() {
 
@@ -121,53 +164,53 @@ public class Field {
                     }
                 }
                 floorGeom.rotate(-FastMath.HALF_PI, 0,0);
-                floorGeom.setLocalTranslation(cells[i][j].getVector().x + 1.05f, 0.92f - (i * 0.001f) + (j * 0.001f), cells[i][j].getVector().z + 4.4f);
+                floorGeom.setLocalTranslation(cells[i][j].vector.x + 1.05f, 0.92f - (i * 0.0001f) + (j * 0.0001f), cells[i][j].vector.z + 4.4f);
                 rootNode.attachChild(floorGeom);
             }
         }
     }
     private void setTowers() {
 
-        cells[1][0].getModel().detachChildAt(0);
-        cells[1][0].getModel().attachChild(resources.getModel(2).clone());
-        cells[1][0].getModel().setMaterial(resources.getMaterial(1));
+        cells[1][0].model.detachChildAt(0);
+        cells[1][0].model.attachChild(resources.getModel(2).clone());
+        cells[1][0].model.setMaterial(resources.getMaterial(1));
         cells[1][0].setColor(Color.RED);
         cells[1][0].setHeight(2);
         cells[1][0].setMaterial(resources.getMaterial(1));
 
-        cells[2][columns - 1].getModel().detachChildAt(0);
-        cells[2][columns - 1].getModel().attachChild(resources.getModel(2).clone());
-        cells[2][columns - 1].getModel().setMaterial(resources.getMaterial(2));
+        cells[2][columns - 1].model.detachChildAt(0);
+        cells[2][columns - 1].model.attachChild(resources.getModel(2).clone());
+        cells[2][columns - 1].model.setMaterial(resources.getMaterial(2));
         cells[2][columns - 1].setColor(Color.BLUE);
         cells[2][columns - 1].setHeight(2);
         cells[2][columns - 1].setMaterial(resources.getMaterial(2));
 
         if (Settings.ROWS % 2 != 0) {
-            cells[rows - 2][0].getModel().detachChildAt(0);
-            cells[rows - 2][0].getModel().attachChild(resources.getModel(2).clone());
-            cells[rows - 2][0].getModel().setMaterial(resources.getMaterial(4));
+            cells[rows - 2][0].model.detachChildAt(0);
+            cells[rows - 2][0].model.attachChild(resources.getModel(2).clone());
+            cells[rows - 2][0].model.setMaterial(resources.getMaterial(4));
             cells[rows - 2][0].setColor(Color.GREEN);
             cells[rows - 2][0].setHeight(2);
             cells[rows - 2][0].setMaterial(resources.getMaterial(4));
 
-            cells[rows - 3][columns - 1].getModel().detachChildAt(0);
-            cells[rows - 3][columns - 1].getModel().attachChild(resources.getModel(2).clone());
-            cells[rows - 3][columns - 1].getModel().setMaterial(resources.getMaterial(3));
+            cells[rows - 3][columns - 1].model.detachChildAt(0);
+            cells[rows - 3][columns - 1].model.attachChild(resources.getModel(2).clone());
+            cells[rows - 3][columns - 1].model.setMaterial(resources.getMaterial(3));
             cells[rows - 3][columns - 1].setColor(Color.YELLOW);
             cells[rows - 3][columns - 1].setHeight(2);
             cells[rows - 3][columns - 1].setMaterial(resources.getMaterial(3));
         }
         else {
-            cells[rows - 3][0].getModel().detachChildAt(0);
-            cells[rows - 3][0].getModel().attachChild(resources.getModel(2).clone());
-            cells[rows - 3][0].getModel().setMaterial(resources.getMaterial(4));
+            cells[rows - 3][0].model.detachChildAt(0);
+            cells[rows - 3][0].model.attachChild(resources.getModel(2).clone());
+            cells[rows - 3][0].model.setMaterial(resources.getMaterial(4));
             cells[rows - 3][0].setColor(Color.GREEN);
             cells[rows - 3][0].setHeight(2);
             cells[rows - 3][0].setMaterial(resources.getMaterial(4));
 
-            cells[rows - 2][columns - 1].getModel().detachChildAt(0);
-            cells[rows - 2][columns - 1].getModel().attachChild(resources.getModel(2).clone());
-            cells[rows - 2][columns - 1].getModel().setMaterial(resources.getMaterial(3));
+            cells[rows - 2][columns - 1].model.detachChildAt(0);
+            cells[rows - 2][columns - 1].model.attachChild(resources.getModel(2).clone());
+            cells[rows - 2][columns - 1].model.setMaterial(resources.getMaterial(3));
             cells[rows - 2][columns - 1].setColor(Color.YELLOW);
             cells[rows - 2][columns - 1].setHeight(2);
             cells[rows - 2][columns - 1].setMaterial(resources.getMaterial(3));

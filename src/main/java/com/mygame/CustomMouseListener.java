@@ -6,12 +6,12 @@ import com.jme3.input.RawInputListener;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.input.event.*;
 
-public class MyMouseListener {
+public class CustomMouseListener {
     private final InputManager inputManager;
-    public MyMouseListener(InputManager inputManager) {
+    public CustomMouseListener(InputManager inputManager) {
         this.inputManager = inputManager;
     }
-    public void addMouseListener(){
+    public void addMouseListener() {
         inputManager.addMapping("RMB", new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
         inputManager.addRawInputListener(new RawInputListener() {
             @Override
@@ -26,17 +26,14 @@ public class MyMouseListener {
             public void onJoyAxisEvent(JoyAxisEvent evt) {
 
             }
-
             @Override
             public void onJoyButtonEvent(JoyButtonEvent evt) {
 
             }
-
             @Override
             public void onMouseMotionEvent(MouseMotionEvent evt) {
 
             }
-
             @Override
             public void onMouseButtonEvent(MouseButtonEvent evt) {
                 if (evt.isPressed()) {
@@ -71,14 +68,7 @@ public class MyMouseListener {
                                 int numOfTowers = Main.getField().getPlayers()[playerIndex].getTowers();
 
                                 if (Settings.getCurrentPhase() == 0) {
-
-                                    if(Field.getCurrentCell() != null)
-                                        Field.getCurrentCell().getModel().getChild(0).setMaterial(Field.getCurrentCell().getMaterial());
-
-                                    for (Cell cell : Field.getNeighbourCells()) {
-                                        if(cell != null)
-                                            cell.getModel().getChild(0).setMaterial(cell.getMaterial());
-                                    }
+                                    Command.deselectCells();
 
                                     Main.getController().changeImage(1,0);
                                     Main.getField().getPlayers()[playerIndex].setPoints(playerPoints + numOfTowers);

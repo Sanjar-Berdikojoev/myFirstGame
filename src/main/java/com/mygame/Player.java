@@ -1,7 +1,6 @@
 package com.mygame;
 
 public class Player {
-
     private String name;
     private final Color color;
     private boolean isActive;
@@ -29,19 +28,15 @@ public class Player {
     public void setActive(boolean active) {
         isActive = active;
     }
-
     public int getTowers() {
         return towers;
     }
-
     public void setTowers(int towers) {
         this.towers = towers;
     }
-
     public int getPoints() {
         return points;
     }
-
     public void setPoints(int points) {
         this.points = points;
     }
