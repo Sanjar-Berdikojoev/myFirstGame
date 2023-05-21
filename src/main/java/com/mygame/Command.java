@@ -377,8 +377,8 @@ public class Command {
 
         int counter = 0;
         Player currentPlayer = Main.getField().getPlayers()[Field.getCurrentPlayerIndex()];
-
         Cell[][] cells = Main.getField().getCells();
+
         while(currentPlayer.getPoints() > 0) {
             for (int i = 0; i < Settings.ROWS; i++) {
                 for (int j = 0; j < Settings.COLUMNS; j++) {
@@ -392,9 +392,6 @@ public class Command {
                         continue;
                     }
 
-                    if(counter == currentPlayer.getTowers())
-                        return;
-
                     if(currentCell.getColor() == currentPlayer.getColor()) {
                         currentPlayer.setPoints(currentPlayer.getPoints() - 1);
                         currentCell.setHeight(currentCell.getHeight() + 1);
@@ -405,6 +402,8 @@ public class Command {
                     }
                 }
             }
+            if(counter >= currentPlayer.getTowers())
+                return;
         }
     }
     public static void deselectCells() {
