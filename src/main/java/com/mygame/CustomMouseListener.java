@@ -3,16 +3,75 @@ package com.mygame;
 import com.jme3.input.InputManager;
 import com.jme3.input.MouseInput;
 import com.jme3.input.RawInputListener;
+import com.jme3.input.controls.ActionListener;
+import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.input.event.*;
 
-public class CustomMouseListener {
+public class CustomMouseListener implements ActionListener{
+
     private final InputManager inputManager;
     public CustomMouseListener(InputManager inputManager) {
         this.inputManager = inputManager;
     }
+
+    @Override
+    public void onAction(String name, boolean isPressed, float tpf) {
+        if (name.equals("MouseWheelUp")) {
+            if (isPressed) {
+                switchCommandForward();
+            }
+        } else if (name.equals("MouseWheelDown")) {
+            if (isPressed) {
+                switchCommandBackward();
+            }
+        }
+    }
+    public void initInput() {
+        inputManager.addMapping("MouseWheelUp", new MouseAxisTrigger(MouseInput.AXIS_WHEEL, false));
+        inputManager.addMapping("MouseWheelDown", new MouseAxisTrigger(MouseInput.AXIS_WHEEL, true));
+
+        inputManager.addListener(this, "MouseWheelUp", "MouseWheelDown");
+    }
+    private void switchCommandForward() {
+        //Settings.setCurrentCommand((Settings.getCurrentCommand() + 1) % (Settings.NUMBER_OF_SLOTS + 1));
+        Settings.setCurrentCommand(Settings.getCurrentCommand() + 1);
+
+        if(Settings.getCurrentCommand() > 4)
+            Settings.setCurrentCommand(1);
+
+        if(Settings.getCurrentPhase() == 0) {
+            Main.getController().changeImage(0, Settings.getCurrentCommand());
+            if(Settings.getCurrentCommand() == 1)
+                Command.selectTower(Field.getCurrentCell());
+            else
+                Command.deselectCells();
+        }
+        else
+            Main.getController().changeImage(1,Settings.getCurrentCommand());
+    }
+    private void switchCommandBackward() {
+        Settings.setCurrentCommand(Settings.getCurrentCommand() - 1);
+
+        if(Settings.getCurrentCommand() < 1)
+            Settings.setCurrentCommand(4);
+
+        if(Settings.getCurrentPhase() == 0) {
+            Main.getController().changeImage(0, Settings.getCurrentCommand());
+            if(Settings.getCurrentCommand() == 1)
+                Command.selectTower(Field.getCurrentCell());
+            else
+                Command.deselectCells();
+        }
+        else
+            Main.getController().changeImage(1,Settings.getCurrentCommand());
+    }
     public void addMouseListener() {
+
+        inputManager.addMapping("MouseWheelUp", new MouseAxisTrigger(MouseInput.AXIS_WHEEL, false));
+        inputManager.addMapping("MouseWheelDown", new MouseAxisTrigger(MouseInput.AXIS_WHEEL, true));
         inputManager.addMapping("RMB", new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
+
         inputManager.addRawInputListener(new RawInputListener() {
             @Override
             public void beginInput() {
@@ -36,7 +95,6 @@ public class CustomMouseListener {
             }
             @Override
             public void onMouseButtonEvent(MouseButtonEvent evt) {
-
                 if (evt.isPressed()) {
 
                     if(Main.getField().getPlayers()[Field.getCurrentPlayerIndex()].isActive())
@@ -101,7 +159,6 @@ public class CustomMouseListener {
                     }
                 }
             }
-
             @Override
             public void onKeyEvent(KeyInputEvent evt) {
 

@@ -106,14 +106,14 @@ public class GUIController implements ScreenController {
 
         for(int i = 0; i < Settings.NUMBER_OF_SLOTS; i++) {
             Element currentSlot = screen.findElementById("slot" + (i + 1));
-            if(i == commandIndex - 1) {
-                NiftyImage image = Main.getResources().getChosenHotBarSlot(phaseIndex, i);
-                Objects.requireNonNull(Objects.requireNonNull(currentSlot).getRenderer(ImageRenderer.class)).setImage(image);
-            }
-            else {
-                NiftyImage image = Main.getResources().getHotBarSlot(phaseIndex, i);
-                Objects.requireNonNull(Objects.requireNonNull(currentSlot).getRenderer(ImageRenderer.class)).setImage(image);
-            }
+            NiftyImage image;
+
+            if(i == commandIndex - 1)
+                image = Main.getResources().getChosenHotBarSlot(phaseIndex, i);
+            else
+                image = Main.getResources().getHotBarSlot(phaseIndex, i);
+
+            Objects.requireNonNull(Objects.requireNonNull(currentSlot).getRenderer(ImageRenderer.class)).setImage(image);
         }
     }
     public void createMappings(){
@@ -138,12 +138,7 @@ public class GUIController implements ScreenController {
                 Settings.setCurrentCommand(2);
                 if (Settings.getCurrentPhase() == 0) {
                     changeImage(0,2);
-
-                    if(Field.getCurrentCell() != null ) {
-                        Field.getCurrentCell().model.getChild(0).setMaterial(Field.getCurrentCell().getMaterial());
-                        for (Cell cell : Field.getNeighbourCells())
-                            cell.model.getChild(0).setMaterial(cell.getMaterial());
-                    }
+                    Command.deselectCells();
                 }
                 else
                     changeImage(1,2);

@@ -80,10 +80,11 @@ public class Main extends SimpleApplication {
         CustomMouseListener customMouseListener = new CustomMouseListener(inputManager);
         customMouseListener.addMouseListener();
         inputManager.addListener(controller.getActionListener(), "Button_1", "Button_2", "Button_3", "Button_4", "Button_0");
+        customMouseListener.initInput();
 
         setDisplayStatView(false);
         setDisplayFps(true);
-
+        flyCam.setZoomSpeed(0);
     }
     @Override
     public void simpleUpdate(float tpf) {
