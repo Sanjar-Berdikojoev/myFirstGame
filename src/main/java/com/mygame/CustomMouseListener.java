@@ -36,6 +36,7 @@ public class CustomMouseListener {
             }
             @Override
             public void onMouseButtonEvent(MouseButtonEvent evt) {
+
                 if (evt.isPressed()) {
 
                     if(Main.getField().getPlayers()[Field.getCurrentPlayerIndex()].isActive())

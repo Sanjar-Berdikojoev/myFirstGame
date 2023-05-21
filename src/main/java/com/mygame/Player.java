@@ -1,6 +1,7 @@
 package com.mygame;
 
 public class Player {
+
     private String name;
     private final Color color;
     private boolean isActive;

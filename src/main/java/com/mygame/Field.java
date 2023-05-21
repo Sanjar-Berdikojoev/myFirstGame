@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Field {
+
     private static Cell currentCell = null;
     public static final ArrayList<Cell> NEIGHBOUR_CELLS = new ArrayList<>();
     private final int rows;

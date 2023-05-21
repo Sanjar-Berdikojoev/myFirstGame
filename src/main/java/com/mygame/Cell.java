@@ -5,6 +5,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 
 public class Cell {
+
     private int height;
     public final Vector3f vector;
     private Color color;

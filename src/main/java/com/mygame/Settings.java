@@ -10,7 +10,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 
 public class Settings {
-
+    
     public final static int MAX_HEIGHT = 8;
     public final static float SCALE_COEFFICIENT = 0.05f;
     public final static int NUMBER_OF_MATERIALS = 10;

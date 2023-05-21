@@ -83,6 +83,7 @@ public class Main extends SimpleApplication {
 
         setDisplayStatView(false);
         setDisplayFps(true);
+
     }
     @Override
     public void simpleUpdate(float tpf) {

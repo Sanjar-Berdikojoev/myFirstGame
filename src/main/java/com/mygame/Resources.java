@@ -16,6 +16,7 @@ public class Resources {
     private final NiftyImage[][] HOT_BAR_SLOTS = new NiftyImage[Settings.NUMBER_OF_PHASES][Settings.NUMBER_OF_SLOTS];
     private final NiftyImage[][] CHOSEN_HOT_BAR_SLOTS = new NiftyImage[Settings.NUMBER_OF_PHASES][Settings.NUMBER_OF_SLOTS];
     public void setHotBarSLots() {
+
         HOT_BAR_SLOTS[0][0] = Main.getNifty().createImage("Models/HotBars/Selector.png", false);
         HOT_BAR_SLOTS[0][1] = Main.getNifty().createImage("Models/HotBars/Empty_Slot.png", false);
         HOT_BAR_SLOTS[0][2] = Main.getNifty().createImage("Models/HotBars/Next_Phase.png", false);

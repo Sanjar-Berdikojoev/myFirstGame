@@ -408,6 +408,7 @@ public class Command {
         }
     }
     public static void deselectCells() {
+
         if(Field.getCurrentCell() != null)
             Field.getCurrentCell().model.getChild(0).setMaterial(Field.getCurrentCell().getMaterial());
 

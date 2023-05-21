@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 public class GUIController implements ScreenController {
+
     private Nifty nifty;
     private Screen screen;
     private final InputManager inputManager;
