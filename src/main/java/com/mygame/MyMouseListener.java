@@ -18,12 +18,10 @@ public class MyMouseListener {
             public void beginInput() {
 
             }
-
             @Override
             public void endInput() {
 
             }
-
             @Override
             public void onJoyAxisEvent(JoyAxisEvent evt) {
 
@@ -43,7 +41,7 @@ public class MyMouseListener {
             public void onMouseButtonEvent(MouseButtonEvent evt) {
                 if (evt.isPressed()) {
 
-                    if(!Main.getField().getPlayers()[Field.getCurrentPlayerIndex()].isActive())
+                    if(Main.getField().getPlayers()[Field.getCurrentPlayerIndex()].isActive())
                         return;
 
                     if (evt.getButtonIndex() == MouseInput.BUTTON_LEFT) {
@@ -61,7 +59,6 @@ public class MyMouseListener {
                         }
                     } else if (evt.getButtonIndex() == MouseInput.BUTTON_RIGHT) {
                         switch (Settings.getCurrentCommand()) {
-
                             case 1 -> {
                                 if (Settings.getCurrentPhase() == 0) {
                                     Command.onRightMouseButtonClick();
@@ -83,7 +80,7 @@ public class MyMouseListener {
                                             cell.getModel().getChild(0).setMaterial(cell.getMaterial());
                                     }
 
-                                    Main.getNifty().fromXml("Interface/ControlGui_SecondPhase.xml", "inventory");
+                                    Main.getController().changeImage(1,0);
                                     Main.getField().getPlayers()[playerIndex].setPoints(playerPoints + numOfTowers);
                                     Settings.setCurrentCommand(5);
                                     Settings.setCurrentPhase(1);
@@ -103,13 +100,11 @@ public class MyMouseListener {
                                 Main.getField().getPlayers()[Field.getCurrentPlayerIndex()].setActive(false);
                                 Settings.setInactivePlayers(Settings.getInactivePlayers() + 1);
 
-                                while(!Main.getField().getPlayers()[Field.getCurrentPlayerIndex()].isActive())
+                                while(Main.getField().getPlayers()[Field.getCurrentPlayerIndex()].isActive())
                                     Field.setCurrentPlayerIndex((Field.getCurrentPlayerIndex() + 1) % Settings.getNumberOfPlayers());
-                                Main.getNifty().fromXml("Interface/ControlGui_FirstPhase.xml", "inventory");
+                                Main.getController().changeImage(0,0);
                                 Settings.setCurrentPhase(0);
                                 Settings.setCurrentCommand(5);
-                            }
-                            default -> {
                             }
                         }
                     }

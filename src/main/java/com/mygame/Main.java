@@ -10,19 +10,16 @@ import com.jme3.input.controls.KeyTrigger;
 import com.jme3.math.*;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.RenderManager;
-import com.jme3.renderer.queue.RenderQueue;
-import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.screen.Screen;
 
 public class Main extends SimpleApplication {
     private static Resources resources;
     private Vector2f midDisplayLocation;
     private static Nifty nifty;
-    private Node guiNode;
     private static Field field;
     private static Ray cursorRay;
-    private GUI_Controller guiController;
+    private static GUIController controller;
     public static void main(String[] args) {
         Main app = new Main();
         app.start();
@@ -38,11 +35,12 @@ public class Main extends SimpleApplication {
 
         NiftyJmeDisplay niftyJmeDisplay = new NiftyJmeDisplay(assetManager, inputManager, audioRenderer, viewPort);
         nifty = niftyJmeDisplay.getNifty();
-        nifty.fromXml("Interface/ControlGui_FirstPhase.xml", "inventory");
+        nifty.fromXml("Interface/ControlGui.xml", "inventory");
         guiViewPort.addProcessor(niftyJmeDisplay);
-        guiNode = new Node("guiNode");
-        guiNode.setQueueBucket(RenderQueue.Bucket.Gui);
-        guiNode.setCullHint(Spatial.CullHint.Never);
+        Screen screen = nifty.getCurrentScreen();
+        controller = new GUIController(inputManager);
+        nifty.registerScreenController(controller);
+        controller.bind(nifty, screen);
 
         AudioNode audioNode = new AudioNode(assetManager, "Sounds/StarSummer.ogg", AudioData.DataType.Buffer);
         audioNode.setPositional(false);
@@ -67,24 +65,24 @@ public class Main extends SimpleApplication {
             Settings.setLastWPressTime(currentTime);
         }, "StartMusic");
 
-        MyMouseListener myMouseListener = new MyMouseListener(inputManager);
-        myMouseListener.addMouseListener();
-
-        guiController = new GUI_Controller(inputManager, nifty);
-        guiController.createMappings();
-        inputManager.addListener(guiController.getActionListener(), "Button_1", "Button_2", "Button_3", "Button_4", "Button_0");
-
         resources = new Resources(assetManager);
         resources.setModelsAndMaterials();
+        resources.setHotBarSLots();
         midDisplayLocation = new Vector2f(settings.getWidth() / 2f , settings.getHeight() / 2f);
         field = new Field(assetManager, rootNode, Settings.ROWS, Settings.COLUMNS);
-        Settings.setMyConfigurationsForCamera(inputManager, flyCam);
         field.createField();
         field.setPlayers(Settings.getNumberOfPlayers());
+        controller.updatePlayerInfo();
+        controller.createMappings();
+        Settings.setMyConfigurationsForCamera(inputManager, flyCam);
+
+        MyMouseListener myMouseListener = new MyMouseListener(inputManager);
+        myMouseListener.addMouseListener();
+        inputManager.addListener(controller.getActionListener(), "Button_1", "Button_2", "Button_3", "Button_4", "Button_0");
     }
     @Override
     public void simpleUpdate(float tpf) {
-
+        controller.updatePlayerInfo();
         Settings.setLimitForCamera(cam);
         Vector3f rayBegin = new Vector3f(cam.getWorldCoordinates(midDisplayLocation, 0.0f));
         cursorRay = new Ray(rayBegin, cam.getDirection());
@@ -103,5 +101,8 @@ public class Main extends SimpleApplication {
     }
     public static Nifty getNifty() {
         return nifty;
+    }
+    public static GUIController getController() {
+        return controller;
     }
 }

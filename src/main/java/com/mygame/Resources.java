@@ -4,6 +4,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Spatial;
+import de.lessvoid.nifty.render.NiftyImage;
 
 public class Resources {
     private final AssetManager assetManager;
@@ -12,6 +13,27 @@ public class Resources {
     }
     private final Spatial[] MODELS = new Spatial[Settings.MAX_HEIGHT + 1];
     private final Material[] MATERIALS = new Material[Settings.NUMBER_OF_MATERIALS];
+    private final NiftyImage[][] HOT_BAR_SLOTS = new NiftyImage[Settings.NUMBER_OF_PHASES][Settings.NUMBER_OF_SLOTS];
+    private final NiftyImage[][] CHOSEN_HOT_BAR_SLOTS = new NiftyImage[Settings.NUMBER_OF_PHASES][Settings.NUMBER_OF_SLOTS];
+    public void setHotBarSLots() {
+        HOT_BAR_SLOTS[0][0] = Main.getNifty().createImage("Models/HotBars/Selector.png", false);
+        HOT_BAR_SLOTS[0][1] = Main.getNifty().createImage("Models/HotBars/Empty_Slot.png", false);
+        HOT_BAR_SLOTS[0][2] = Main.getNifty().createImage("Models/HotBars/Next_Phase.png", false);
+        HOT_BAR_SLOTS[0][3] = Main.getNifty().createImage("Models/HotBars/Resign.png", false);
+        HOT_BAR_SLOTS[1][0] = Main.getNifty().createImage("Models/HotBars/Add_Point.png", false);
+        HOT_BAR_SLOTS[1][1] = Main.getNifty().createImage("Models/HotBars/Add_Max_Point.png", false);
+        HOT_BAR_SLOTS[1][2] = Main.getNifty().createImage("Models/HotBars/Skip.png", false);
+        HOT_BAR_SLOTS[1][3] = Main.getNifty().createImage("Models/HotBars/Resign.png", false);
+
+        CHOSEN_HOT_BAR_SLOTS[0][0] = Main.getNifty().createImage("Models/HotBars/Selector(chosen).png", false);
+        CHOSEN_HOT_BAR_SLOTS[0][1] = Main.getNifty().createImage("Models/HotBars/Empty_Slot(chosen).png", false);
+        CHOSEN_HOT_BAR_SLOTS[0][2] = Main.getNifty().createImage("Models/HotBars/Next_Phase(chosen).png", false);
+        CHOSEN_HOT_BAR_SLOTS[0][3] = Main.getNifty().createImage("Models/HotBars/Resign(chosen).png", false);
+        CHOSEN_HOT_BAR_SLOTS[1][0] = Main.getNifty().createImage("Models/HotBars/Add_Point(chosen).png", false);
+        CHOSEN_HOT_BAR_SLOTS[1][1] = Main.getNifty().createImage("Models/HotBars/Add_Max_Point(chosen).png", false);
+        CHOSEN_HOT_BAR_SLOTS[1][2] = Main.getNifty().createImage("Models/HotBars/Skip(chosen).png", false);
+        CHOSEN_HOT_BAR_SLOTS[1][3] = Main.getNifty().createImage("Models/HotBars/Resign(chosen).png", false);
+    }
     public void setModelsAndMaterials() {
         for (int i = 0; i < 10; i++)
             MATERIALS[i] = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
@@ -37,5 +59,11 @@ public class Resources {
     }
     public Spatial getModel(int i) {
         return MODELS[i];
+    }
+    public NiftyImage getHotBarSlot(int i, int j) {
+        return HOT_BAR_SLOTS[i][j];
+    }
+    public NiftyImage getChosenHotBarSlot(int i, int j) {
+        return CHOSEN_HOT_BAR_SLOTS[i][j];
     }
 }

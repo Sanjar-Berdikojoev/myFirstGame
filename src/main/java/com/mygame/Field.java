@@ -10,17 +10,17 @@ import com.jme3.scene.shape.Quad;
 import com.jme3.texture.Texture;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Field {
     private static Cell currentCell = null;
-    private static ArrayList<Cell> neighbourCells = new ArrayList<>();
+    private static final ArrayList<Cell> NEIGHBOUR_CELLS = new ArrayList<>();
     private final int rows;
     private final int columns;
     private final AssetManager assetManager;
     private final Resources resources;
     private final Node rootNode;
-    private Vector3f cellPos;
-    private Player[] players = new Player[Settings.getNumberOfPlayers()];
+    private final Player[] PLAYERS = new Player[Settings.getNumberOfPlayers()];
     private Cell[][] cells;
     private static int currentPlayerIndex = 0;
     Field(AssetManager assetManager, Node rootNode, int rows, int columns) {
@@ -40,6 +40,7 @@ public class Field {
 
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
+                Vector3f cellPos;
                 if(i % 2 != 0)
                     cellPos = new Vector3f(xPos - 1.0f, yPos, zPos);
                 else
@@ -56,13 +57,13 @@ public class Field {
             zPos += 1.75f;
         }
     }
-//    public void optimizeField() {
-//        for (int i = 0; i < Settings.ROWS; i+=2)
-//            cells[i][Settings.COLUMNS - 1].getModel().detachAllChildren();
-//    }
-    public void setPlayers(int numberOfPlayers){
-        for (int i = 0; i < numberOfPlayers; i++)
-            players[i] = new Player(Color.values()[i], true, 1, 0);
+    public void setPlayers(int numberOfPlayers) {
+
+        Random random = new Random();
+        for (int i = 0; i < numberOfPlayers; i++) {
+            int index = random.nextInt(100000);
+            PLAYERS[i] = new Player("Guest" + index, Color.values()[i], true, 1, 0);
+        }
         setTowers();
         setFloor();
     }
@@ -182,10 +183,10 @@ public class Field {
         Field.currentCell = currentCell;
     }
     public static ArrayList<Cell> getNeighbourCells() {
-        return neighbourCells;
+        return NEIGHBOUR_CELLS;
     }
     public Player[] getPlayers() {
-        return players;
+        return PLAYERS;
     }
     public static int getCurrentPlayerIndex() {
         return currentPlayerIndex;

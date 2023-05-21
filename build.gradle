@@ -48,11 +48,10 @@ dependencies {
   
   // Physics Library
   implementation "org.jmonkeyengine:jme3-jbullet:$jmeVer"
-    implementation 'org.jetbrains:annotations:23.0.0'
-    implementation 'org.jetbrains:annotations:23.0.0'
+  implementation 'org.jetbrains:annotations:23.0.0'
+  implementation 'org.jetbrains:annotations:23.0.0'
 
-    // Additional Libraries
-
+  // Additional Libraries
   // Assets sub-project
   runtimeOnly project(':assets')
 }

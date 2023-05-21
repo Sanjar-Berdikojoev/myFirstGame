@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty xmlns="http://nifty-gui.lessvoid.com/nifty-gui" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://raw.githubusercontent.com/void256/nifty-gui/1.4/nifty-core/src/main/resources/nifty.xsd">
     <screen id="inventory" controller="mygame.Main">
-        <layer id="hotBar" childLayout="center" valign="bottom" backgroundColor="#0000" width="100%" height="100%">
+        <layer id="hotBar" childLayout="center" valign="bottom" width="100%" height="100%">
             <panel align="center" valign="bottom" childLayout="horizontal">
                 <image id="slot1" filename="Models/HotBars/Selector.png" width="100" height="100"/>
                 <image id="slot2" filename="Models/HotBars/Empty_Slot.png" width="100" height="100"/>
@@ -12,6 +12,14 @@
         <layer id="cross" childLayout="absolute" backgroundColor="#0000">
             <panel childLayout="center" width="100%" height="100%">
                     <image id="white_cross" filename="Models/White_Cross.png" width="30" height="30"/>
+            </panel>
+        </layer>
+        <layer id="playerInfo" childLayout="center" valign="top" width="100%" height="100%">
+            <panel align="center" valign="top" childLayout="horizontal">
+                <text id="playerNameText" height="8%" width="200" font="Interface/Fonts/Default.fnt" text="Player: "/>
+                <text id="towerCountText" height="8%" width="200" font="Interface/Fonts/Default.fnt" text="Towers: "/>
+                <text id="playerColorText" height="8%" width="200" font="Interface/Fonts/Default.fnt" text="Color: "/>
+                <text id="playerPointsText" height="8%" width="200" font="Interface/Fonts/Default.fnt" text="Points: "/>
             </panel>
         </layer>
     </screen>

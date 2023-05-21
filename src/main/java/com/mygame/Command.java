@@ -293,9 +293,9 @@ public class Command {
 
     public static void passMove() {
         int numOfPlayers = Settings.getNumberOfPlayers();
-        Main.getNifty().fromXml("Interface/ControlGui_FirstPhase.xml", "inventory");
+        Main.getController().changeImage(0,0);
         Field.setCurrentPlayerIndex((Field.getCurrentPlayerIndex() + 1) % numOfPlayers);
-        while(!Main.getField().getPlayers()[Field.getCurrentPlayerIndex()].isActive())
+        while(Main.getField().getPlayers()[Field.getCurrentPlayerIndex()].isActive())
             Field.setCurrentPlayerIndex((Field.getCurrentPlayerIndex() + 1) % numOfPlayers);
         Settings.setCurrentPhase(0);
     }
@@ -368,7 +368,7 @@ public class Command {
                     cell.getModel().getChild(0).setMaterial(cell.getMaterial());
             }
 
-            Main.getNifty().fromXml("Interface/ControlGui_SecondPhase.xml", "inventory");
+            Main.getController().changeImage(1,0);
             Main.getField().getPlayers()[playerIndex].setPoints(playerPoints + numOfTowers);
             Settings.setCurrentCommand(5);
             Settings.setCurrentPhase(1);
