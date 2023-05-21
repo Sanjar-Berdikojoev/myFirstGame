@@ -76,13 +76,15 @@ public class Field {
         setFloor();
     }
     public void setTextsOverTowers(Camera camera) {
+
         BitmapFont font = assetManager.loadFont("Interface/Fonts/Default.fnt");
         BitmapText[][] texts = new BitmapText[rows][columns];
+
         for (Spatial child : rootNode.getChildren()) {
-            if (child instanceof BitmapText) {
+            if (child instanceof BitmapText)
                 rootNode.detachChild(child);
-            }
         }
+
         for(int i = 0; i < rows; i++) {
             for(int j = 0; j < columns; j++) {
                 Cell currentCell = cells[i][j];
@@ -102,9 +104,15 @@ public class Field {
                     Vector3f direction = cameraPosition.subtract(texts[i][j].getLocalTranslation()).multLocal(1, 0, 1).normalizeLocal();
                     Quaternion rotation = new Quaternion();
                     rotation.lookAt(direction, Vector3f.UNIT_Y);
-
                     texts[i][j].setLocalRotation(rotation);
-                    texts[i][j].setColor(ColorRGBA.White);
+
+                    switch(currentCell.getColor()) {
+                        case RED -> texts[i][j].setColor(ColorRGBA.Red);
+                        case BLUE -> texts[i][j].setColor(ColorRGBA.Blue);
+                        case YELLOW -> texts[i][j].setColor(ColorRGBA.Yellow);
+                        case GREEN -> texts[i][j].setColor(ColorRGBA.Green);
+                    }
+
                     rootNode.attachChild(texts[i][j]);
                 }
             }

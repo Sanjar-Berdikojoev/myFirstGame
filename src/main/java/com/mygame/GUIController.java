@@ -11,6 +11,7 @@ import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+import de.lessvoid.nifty.tools.Color;
 import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
@@ -35,19 +36,7 @@ public class GUIController implements ScreenController {
     public void onEndScreen() {
 
     }
-//    public void createFont() throws IOException, FontFormatException {
-//        RenderFont customFont = nifty.createFont("Materials/ChunkFiveRegular.otf");
-//
-//        Element playerNameText = screen.findElementById("playerNameText");
-//        Element towerCountText = screen.findElementById("towerCountText");
-//        Element playerColorText = screen.findElementById("playerColorText");
-//        Element scoreText = screen.findElementById("playerPointsText");
-//
-//        playerNameText.getRenderer(TextRenderer.class).setFont(customFont);
-//        towerCountText.getRenderer(TextRenderer.class).setFont(customFont);
-//        playerColorText.getRenderer(TextRenderer.class).setFont(customFont);
-//        scoreText.getRenderer(TextRenderer.class).setFont(customFont);
-//    }
+
     public void updatePlayerInfo() {
         Player currentPlayer = Main.getField().getPlayers()[Field.getCurrentPlayerIndex()];
 
@@ -59,7 +48,50 @@ public class GUIController implements ScreenController {
         Element playerNameText = screen.findElementById("playerNameText");
         Element towerCountText = screen.findElementById("towerCountText");
         Element playerColorText = screen.findElementById("playerColorText");
-        Element scoreText = screen.findElementById("playerPointsText");
+        Element playerPointsText = screen.findElementById("playerPointsText");
+
+        switch(currentPlayer.getColor()) {
+            case RED -> {
+                assert playerNameText != null;
+                Objects.requireNonNull(playerNameText.getRenderer(TextRenderer.class)).setColor(new Color("#FF1414"));
+                assert towerCountText != null;
+                Objects.requireNonNull(towerCountText.getRenderer(TextRenderer.class)).setColor(new Color("#FF1414"));
+                assert playerColorText != null;
+                Objects.requireNonNull(playerColorText.getRenderer(TextRenderer.class)).setColor(new Color("#FF1414"));
+                assert playerPointsText != null;
+                Objects.requireNonNull(playerPointsText.getRenderer(TextRenderer.class)).setColor(new Color("#FF1414"));
+            }
+            case BLUE -> {
+                assert playerNameText != null;
+                Objects.requireNonNull(playerNameText.getRenderer(TextRenderer.class)).setColor(new Color("#1414FF"));
+                assert towerCountText != null;
+                Objects.requireNonNull(towerCountText.getRenderer(TextRenderer.class)).setColor(new Color("#1414FF"));
+                assert playerColorText != null;
+                Objects.requireNonNull(playerColorText.getRenderer(TextRenderer.class)).setColor(new Color("#1414FF"));
+                assert playerPointsText != null;
+                Objects.requireNonNull(playerPointsText.getRenderer(TextRenderer.class)).setColor(new Color("#1414FF"));
+            }
+            case YELLOW -> {
+                assert playerNameText != null;
+                Objects.requireNonNull(playerNameText.getRenderer(TextRenderer.class)).setColor(new Color("#FFFF14"));
+                assert towerCountText != null;
+                Objects.requireNonNull(towerCountText.getRenderer(TextRenderer.class)).setColor(new Color("#FFFF14"));
+                assert playerColorText != null;
+                Objects.requireNonNull(playerColorText.getRenderer(TextRenderer.class)).setColor(new Color("#FFFF14"));
+                assert playerPointsText != null;
+                Objects.requireNonNull(playerPointsText.getRenderer(TextRenderer.class)).setColor(new Color("#FFFF14"));
+            }
+            case GREEN -> {
+                assert playerNameText != null;
+                Objects.requireNonNull(playerNameText.getRenderer(TextRenderer.class)).setColor(new Color("#14FF14"));
+                assert towerCountText != null;
+                Objects.requireNonNull(towerCountText.getRenderer(TextRenderer.class)).setColor(new Color("#14FF14"));
+                assert playerColorText != null;
+                Objects.requireNonNull(playerColorText.getRenderer(TextRenderer.class)).setColor(new Color("#14FF14"));
+                assert playerPointsText != null;
+                Objects.requireNonNull(playerPointsText.getRenderer(TextRenderer.class)).setColor(new Color("#14FF14"));
+            }
+        }
 
         assert playerNameText != null;
         Objects.requireNonNull(playerNameText.getRenderer(TextRenderer.class)).setText("Player: " + playerName);
@@ -67,8 +99,8 @@ public class GUIController implements ScreenController {
         Objects.requireNonNull(towerCountText.getRenderer(TextRenderer.class)).setText("Towers: " + playerTowerCount);
         assert playerColorText != null;
         Objects.requireNonNull(playerColorText.getRenderer(TextRenderer.class)).setText("Color: " + playerColor);
-        assert scoreText != null;
-        Objects.requireNonNull(scoreText.getRenderer(TextRenderer.class)).setText("Points: " + playerPoints);
+        assert playerPointsText != null;
+        Objects.requireNonNull(playerPointsText.getRenderer(TextRenderer.class)).setText("Points: " + playerPoints);
     }
     public void changeImage(int phaseIndex, int commandIndex) {
 
