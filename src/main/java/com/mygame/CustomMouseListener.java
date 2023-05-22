@@ -14,27 +14,29 @@ public class CustomMouseListener implements ActionListener{
     public CustomMouseListener(InputManager inputManager) {
         this.inputManager = inputManager;
     }
-
+    private int counter = 0;
     @Override
     public void onAction(String name, boolean isPressed, float tpf) {
         if (name.equals("MouseWheelUp")) {
-            if (isPressed) {
+            if (isPressed && counter == Settings.MOUSE_WHEEL_SENSE) {
                 switchCommandForward();
+                counter = 0;
             }
+            counter++;
         } else if (name.equals("MouseWheelDown")) {
-            if (isPressed) {
+            if (isPressed && counter == Settings.MOUSE_WHEEL_SENSE) {
                 switchCommandBackward();
+                counter = 0;
             }
+            counter++;
         }
     }
     public void initInput() {
         inputManager.addMapping("MouseWheelUp", new MouseAxisTrigger(MouseInput.AXIS_WHEEL, false));
         inputManager.addMapping("MouseWheelDown", new MouseAxisTrigger(MouseInput.AXIS_WHEEL, true));
-
         inputManager.addListener(this, "MouseWheelUp", "MouseWheelDown");
     }
     private void switchCommandForward() {
-        //Settings.setCurrentCommand((Settings.getCurrentCommand() + 1) % (Settings.NUMBER_OF_SLOTS + 1));
         Settings.setCurrentCommand(Settings.getCurrentCommand() + 1);
 
         if(Settings.getCurrentCommand() > 4)
@@ -131,7 +133,7 @@ public class CustomMouseListener implements ActionListener{
 
                                     Main.getController().changeImage(1,0);
                                     Main.getField().getPlayers()[playerIndex].setPoints(playerPoints + numOfTowers);
-                                    Settings.setCurrentCommand(5);
+                                    Settings.setCurrentCommand(0);
                                     Settings.setCurrentPhase(1);
                                 }
                                 else {
@@ -153,7 +155,7 @@ public class CustomMouseListener implements ActionListener{
                                     Field.setCurrentPlayerIndex((Field.getCurrentPlayerIndex() + 1) % Settings.getNumberOfPlayers());
                                 Main.getController().changeImage(0,0);
                                 Settings.setCurrentPhase(0);
-                                Settings.setCurrentCommand(5);
+                                Settings.setCurrentCommand(0);
                             }
                         }
                     }

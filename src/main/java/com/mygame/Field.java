@@ -74,6 +74,7 @@ public class Field {
         }
         setTowers();
         setFloor();
+        setWalls();
     }
     public void setTextsOverTowers(Camera camera) {
 
@@ -121,54 +122,44 @@ public class Field {
     private void setFloor() {
 
         Quad[][] floor = new Quad[Settings.ROWS - 1][Settings.COLUMNS - 1];
-        Texture floorTex1 = assetManager.loadTexture("Models/Floor/Floor.png");
-        Texture floorTex2 = assetManager.loadTexture("Models/Floor/Floor_2.png");
-        Texture floorTex3 = assetManager.loadTexture("Models/Floor/Floor_3.png");
-        Texture floorTex4 = assetManager.loadTexture("Models/Floor/Floor_4.png");
-        Texture floorTex5 = assetManager.loadTexture("Models/Floor/Floor_5.png");
-        Texture floorTex6 = assetManager.loadTexture("Models/Floor/Floor_6.png");
-        Material floorMat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        Material floorMat2 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        Material floorMat3 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        Material floorMat4 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        Material floorMat5 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        Material floorMat6 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        floorMat.setTexture("ColorMap", floorTex1);
-        floorMat2.setTexture("ColorMap", floorTex2);
-        floorMat3.setTexture("ColorMap", floorTex3);
-        floorMat4.setTexture("ColorMap", floorTex4);
-        floorMat5.setTexture("ColorMap", floorTex5);
-        floorMat6.setTexture("ColorMap", floorTex6);
+        Texture[] floorTextures = new Texture[6];
+        Material[] materials = new Material[6];
 
-        for (int i = 0; i < Settings.ROWS - 1; i+=2) {
+        for (int i = 0; i < 6; i++) {
+            floorTextures[i] = assetManager.loadTexture("Models/Floor/Floor_" + (i + 1) + ".png");
+            materials[i] = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+            materials[i].setTexture("ColorMap", floorTextures[i]);
+        }
+
+        for (int i = 0; i < Settings.ROWS - 1; i += 2) {
             for (int j = 0; j < Settings.COLUMNS - 1; j++) {
 
                 floor[i][j] = new Quad(3.7f, 3.7f);
                 Geometry floorGeom = new Geometry("Floor", floor[i][j]);
                 if(Settings.ROWS % 2 != 0) {
                     if (j == 0)
-                        floorGeom.setMaterial(floorMat);
+                        floorGeom.setMaterial(materials[0]);
                     else if (j == Settings.COLUMNS - 2)
-                        floorGeom.setMaterial(floorMat3);
+                        floorGeom.setMaterial(materials[2]);
                     else
-                        floorGeom.setMaterial(floorMat2);
+                        floorGeom.setMaterial(materials[1]);
                 }
                 else {
                     if(i != Settings.ROWS - 2) {
                         if (j == 0)
-                            floorGeom.setMaterial(floorMat);
+                            floorGeom.setMaterial(materials[0]);
                         else if (j == Settings.COLUMNS - 2)
-                            floorGeom.setMaterial(floorMat3);
+                            floorGeom.setMaterial(materials[2]);
                         else
-                            floorGeom.setMaterial(floorMat2);
+                            floorGeom.setMaterial(materials[1]);
                     }
                     else {
                         if (j == 0)
-                            floorGeom.setMaterial(floorMat4);
+                            floorGeom.setMaterial(materials[3]);
                         else if (j == Settings.COLUMNS - 2)
-                            floorGeom.setMaterial(floorMat5);
+                            floorGeom.setMaterial(materials[4]);
                         else
-                            floorGeom.setMaterial(floorMat6);
+                            floorGeom.setMaterial(materials[5]);
                     }
                 }
                 floorGeom.rotate(-FastMath.HALF_PI, 0,0);
@@ -176,6 +167,49 @@ public class Field {
                 rootNode.attachChild(floorGeom);
             }
         }
+    }
+    private void setWalls() {
+
+        Quad[] walls = new Quad[4];
+        Material[] materials = new Material[4];
+        Geometry[] geometries = new Geometry[4];
+
+        Texture redWall = assetManager.loadTexture("Models/Walls/Red_Wall.png");
+        Texture blueWall = assetManager.loadTexture("Models/Walls/Blue_Wall.png");
+        Texture yellowWall = assetManager.loadTexture("Models/Walls/Yellow_Wall.png");
+        Texture greenWall = assetManager.loadTexture("Models/Walls/Green_Wall.png");
+
+        float wallWidth = 2.4f * cells[rows - 1][0].vector.z;
+        float wallHeight = 1.35f * cells[rows - 1][0].vector.z;
+        float distanceFromField = 12.0f;
+
+        for (int i = 0; i < 4; i++)
+            materials[i] = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+
+        materials[0].setTexture("ColorMap", redWall);
+        materials[1].setTexture("ColorMap", blueWall);
+        materials[2].setTexture("ColorMap", yellowWall);
+        materials[3].setTexture("ColorMap", greenWall);
+
+        for (int i = 0; i < 4; i++) {
+            walls[i] = new Quad(wallWidth, wallHeight);
+            geometries[i] = new Geometry("Wall_" + i, walls[i]);
+            geometries[i].setMaterial(materials[i]);
+        }
+
+        geometries[0].setLocalTranslation(cells[0][0].vector.x - 0.18f * wallWidth, 0.0f, cells[0][0].vector.z - distanceFromField);
+        geometries[1].setLocalTranslation(cells[0][0].vector.x - distanceFromField, 0.0f, cells[0][columns - 1].vector.z + 0.73f * wallWidth);
+        geometries[2].setLocalTranslation(cells[0][columns - 1].vector.x + 0.36f * wallWidth, 0.0f, cells[rows - 1 ][0].vector.z + 1.1f * distanceFromField);
+        geometries[3].setLocalTranslation(cells[0][columns - 1].vector.x + 1.1f * distanceFromField, 0.0f, cells[0][columns - 1].vector.z - 0.35f * 0.73f * wallWidth);
+
+        geometries[1].rotate(0.0f, FastMath.HALF_PI, 0.0f);
+        geometries[2].rotate(0.0f, FastMath.PI, 0.0f);
+        geometries[3].rotate(0.0f, -FastMath.HALF_PI, 0.0f);
+
+        rootNode.attachChild(geometries[0]);
+        rootNode.attachChild(geometries[1]);
+        rootNode.attachChild(geometries[2]);
+        rootNode.attachChild(geometries[3]);
     }
     private void setTowers() {
 

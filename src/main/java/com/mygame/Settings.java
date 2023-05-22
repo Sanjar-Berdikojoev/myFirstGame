@@ -18,6 +18,7 @@ public class Settings {
     public final static int COLUMNS = 7;
     public final static int NUMBER_OF_PHASES = 2;
     public final static int NUMBER_OF_SLOTS = 4;
+    public final static int MOUSE_WHEEL_SENSE = 3;
 
     private static long lastWPressTime = 0;
     private static int inactivePlayers = 0;

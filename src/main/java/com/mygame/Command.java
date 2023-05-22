@@ -369,7 +369,7 @@ public class Command {
 
             Main.getController().changeImage(1,0);
             Main.getField().getPlayers()[playerIndex].setPoints(playerPoints + numOfTowers);
-            Settings.setCurrentCommand(5);
+            Settings.setCurrentCommand(0);
             Settings.setCurrentPhase(1);
         }
     }
