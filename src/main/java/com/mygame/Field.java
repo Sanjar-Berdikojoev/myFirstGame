@@ -181,7 +181,7 @@ public class Field {
 
         float wallWidth = 2.4f * cells[rows - 1][0].vector.z;
         float wallHeight = 1.35f * cells[rows - 1][0].vector.z;
-        float distanceFromField = 12.0f;
+        float distanceFromField = 8.0f + rows + columns;
 
         for (int i = 0; i < 4; i++)
             materials[i] = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
