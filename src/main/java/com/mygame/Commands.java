@@ -6,9 +6,9 @@ import com.jme3.math.Ray;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Command {
+public class Commands {
     private static boolean isSelected;
-    public static void onRightMouseButtonClick() {
+    public static void selectTower() {
 
         if(Field.getCurrentCell() != null)
             Field.getCurrentCell().model.getChild(0).setMaterial(Field.getCurrentCell().getMaterial());
@@ -217,7 +217,7 @@ public class Command {
         }
 
         Field.setCurrentCell(currentCell);
-        selectTower(Field.getCurrentCell());
+        highlightTower(Field.getCurrentCell());
     }
 
     public static void addPointForTower(Cell currentCell) {
@@ -273,7 +273,7 @@ public class Command {
         return null;
     }
 
-    public static void selectTower(Cell currentCell) {
+    public static void highlightTower(Cell currentCell) {
 
         if (currentCell == null || currentCell.getHeight() < 2)
             return;
@@ -406,7 +406,7 @@ public class Command {
                 return;
         }
     }
-    public static void deselectCells() {
+    public static void lowlightCells() {
 
         if(Field.getCurrentCell() != null)
             Field.getCurrentCell().model.getChild(0).setMaterial(Field.getCurrentCell().getMaterial());

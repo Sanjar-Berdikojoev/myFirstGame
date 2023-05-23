@@ -129,7 +129,7 @@ public class GUIController implements ScreenController {
                 Settings.setCurrentCommand(1);
                 if (Settings.getCurrentPhase() == 0) {
                     changeImage(0,1);
-                    Command.selectTower(Field.getCurrentCell());
+                    Commands.highlightTower(Field.getCurrentCell());
                 }
                 else
                     changeImage(1,1);
@@ -138,7 +138,7 @@ public class GUIController implements ScreenController {
                 Settings.setCurrentCommand(2);
                 if (Settings.getCurrentPhase() == 0) {
                     changeImage(0,2);
-                    Command.deselectCells();
+                    Commands.lowlightCells();
                 }
                 else
                     changeImage(1,2);
@@ -147,7 +147,7 @@ public class GUIController implements ScreenController {
                 Settings.setCurrentCommand(3);
                 if (Settings.getCurrentPhase() == 0) {
                     changeImage(0,3);
-                    Command.deselectCells();
+                    Commands.lowlightCells();
                 }
                 else if(Settings.getCurrentPhase() == 1)
                     changeImage(1,3);
@@ -156,7 +156,7 @@ public class GUIController implements ScreenController {
                 Settings.setCurrentCommand(4);
                 if (Settings.getCurrentPhase() == 0) {
                     changeImage(0,4);
-                    Command.deselectCells();
+                    Commands.lowlightCells();
                 }
                 else
                     changeImage(1,4);
@@ -165,7 +165,7 @@ public class GUIController implements ScreenController {
                 Settings.setCurrentCommand(0);
                 if (Settings.getCurrentPhase() == 0) {
                     changeImage(0,0);
-                    Command.deselectCells();
+                    Commands.lowlightCells();
                 }
                 else
                     changeImage(1,0);

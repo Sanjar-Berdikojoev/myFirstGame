@@ -76,7 +76,7 @@ public class Field {
         setFloor();
         setWalls();
     }
-    public void setTextsOverTowers(Camera camera) {
+    public void setTextOverTowers(Camera camera) {
 
         BitmapFont font = assetManager.loadFont("Interface/Fonts/Default.fnt");
         BitmapText[][] texts = new BitmapText[rows][columns];

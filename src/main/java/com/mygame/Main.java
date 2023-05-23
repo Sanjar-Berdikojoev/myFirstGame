@@ -92,7 +92,7 @@ public class Main extends SimpleApplication {
         Settings.setLimitForCamera(cam);
         Vector3f rayBegin = new Vector3f(cam.getWorldCoordinates(midDisplayLocation, 0.0f));
         cursorRay = new Ray(rayBegin, cam.getDirection());
-        field.setTextsOverTowers(cam);
+        field.setTextOverTowers(cam);
     }
     @Override
     public void simpleRender(RenderManager rm) {

@@ -14,8 +14,8 @@ public class Settings {
     public final static int MAX_HEIGHT = 8;
     public final static float SCALE_COEFFICIENT = 0.05f;
     public final static int NUMBER_OF_MATERIALS = 10;
-    public final static int ROWS = 7;
-    public final static int COLUMNS = 7;
+    public final static int ROWS = 9;
+    public final static int COLUMNS = 9;
     public final static int NUMBER_OF_PHASES = 2;
     public final static int NUMBER_OF_SLOTS = 4;
     public final static int MOUSE_WHEEL_SENSE = 3;
@@ -50,7 +50,7 @@ public class Settings {
             camera.setLocation(cameraLocation);
         }
 
-        float ceilingHeight = 14f;
+        float ceilingHeight = 24f;
         if(cameraLocation.y > ceilingHeight){
             cameraLocation.y = ceilingHeight;
             camera.setLocation(cameraLocation);

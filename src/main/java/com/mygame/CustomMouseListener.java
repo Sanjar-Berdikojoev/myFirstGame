@@ -45,9 +45,9 @@ public class CustomMouseListener implements ActionListener{
         if(Settings.getCurrentPhase() == 0) {
             Main.getController().changeImage(0, Settings.getCurrentCommand());
             if(Settings.getCurrentCommand() == 1)
-                Command.selectTower(Field.getCurrentCell());
+                Commands.highlightTower(Field.getCurrentCell());
             else
-                Command.deselectCells();
+                Commands.lowlightCells();
         }
         else
             Main.getController().changeImage(1,Settings.getCurrentCommand());
@@ -61,9 +61,9 @@ public class CustomMouseListener implements ActionListener{
         if(Settings.getCurrentPhase() == 0) {
             Main.getController().changeImage(0, Settings.getCurrentCommand());
             if(Settings.getCurrentCommand() == 1)
-                Command.selectTower(Field.getCurrentCell());
+                Commands.highlightTower(Field.getCurrentCell());
             else
-                Command.deselectCells();
+                Commands.lowlightCells();
         }
         else
             Main.getController().changeImage(1,Settings.getCurrentCommand());
@@ -106,21 +106,21 @@ public class CustomMouseListener implements ActionListener{
                         switch (Settings.getCurrentCommand()) {
                             case 1 -> {
                                 if (Settings.getCurrentPhase() == 0)
-                                    Command.setNewTower(Field.getNeighbourCells(), Field.getCurrentCell());
+                                    Commands.setNewTower(Field.getNeighbourCells(), Field.getCurrentCell());
                                 else
-                                    Command.addPointForTower(Command.getTower());
+                                    Commands.addPointForTower(Commands.getTower());
                             }
                             case 2 -> {
                                 if (Settings.getCurrentPhase() == 1)
-                                    Command.addMaxPointsForTower(Command.getTower());
+                                    Commands.addMaxPointsForTower(Commands.getTower());
                             }
                         }
                     } else if (evt.getButtonIndex() == MouseInput.BUTTON_RIGHT) {
                         switch (Settings.getCurrentCommand()) {
                             case 1 -> {
                                 if (Settings.getCurrentPhase() == 0) {
-                                    Command.onRightMouseButtonClick();
-                                    Command.searchNeighbourCells(Field.getCurrentCell());
+                                    Commands.selectTower();
+                                    Commands.searchNeighbourCells(Field.getCurrentCell());
                                 }
                             }
                             case 3 -> {
@@ -129,7 +129,7 @@ public class CustomMouseListener implements ActionListener{
                                 int numOfTowers = Main.getField().getPlayers()[playerIndex].getTowers();
 
                                 if (Settings.getCurrentPhase() == 0) {
-                                    Command.deselectCells();
+                                    Commands.lowlightCells();
 
                                     Main.getController().changeImage(1,0);
                                     Main.getField().getPlayers()[playerIndex].setPoints(playerPoints + numOfTowers);
@@ -138,9 +138,9 @@ public class CustomMouseListener implements ActionListener{
                                 }
                                 else {
                                     if(Main.getField().getPlayers()[playerIndex].getPoints() > 0)
-                                        Command.distributePoints();
-                                    Command.passMove();
-                                    Command.checkIfNoMoves();
+                                        Commands.distributePoints();
+                                    Commands.passMove();
+                                    Commands.checkIfNoMoves();
                                 }
                             }
                             case 4 -> {
