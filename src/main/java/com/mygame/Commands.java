@@ -155,6 +155,7 @@ public class Commands {
                     }
                     checkIfPossibleToContinueSpreading(neighbourCell, neighbourCells);
                     checkIfNoMoves();
+                    Main.getField().setTextOverTowers();
                 }
                 else if(currentCell.getHeight() < neighbourCell.getHeight()) {
 
@@ -169,6 +170,7 @@ public class Commands {
 
                     checkIfPossibleToContinueSpreading(neighbourCell, neighbourCells);
                     checkIfNoMoves();
+                    Main.getField().setTextOverTowers();
 
                     break;
                 }
@@ -204,6 +206,7 @@ public class Commands {
                     }
                     checkIfPossibleToContinueSpreading(neighbourCell, neighbourCells);
                     checkIfNoMoves();
+                    Main.getField().setTextOverTowers();
                 }
             }
         }
@@ -240,6 +243,7 @@ public class Commands {
         currentCell.model.detachChildAt(0);
         currentCell.model.attachChild(resources.getModel(currentCell.getHeight()).clone());
         currentCell.model.getChild(0).setMaterial(currentCell.getMaterial());
+        Main.getField().setTextOverTowers();
 
         if(currentPlayer.getPoints() == 0)
             passMove();
@@ -399,6 +403,7 @@ public class Commands {
                         currentCell.model.attachChild(Main.getResources().getModel(currentCell.getHeight()).clone());
                         currentCell.model.getChild(0).setMaterial(currentCell.getMaterial());
                         counter++;
+                        Main.getField().setTextOverTowers();
                     }
                 }
             }

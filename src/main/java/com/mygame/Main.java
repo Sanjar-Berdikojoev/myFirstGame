@@ -73,6 +73,7 @@ public class Main extends SimpleApplication {
         field = new Field(assetManager, rootNode, Settings.ROWS, Settings.COLUMNS);
         field.createField();
         field.setPlayers(Settings.getNumberOfPlayers());
+        field.setTextOverTowers();
         controller.updatePlayerInfo();
         controller.createMappings();
         Settings.setMyConfigurationsForCamera(inputManager, flyCam);
@@ -92,7 +93,8 @@ public class Main extends SimpleApplication {
         Settings.setLimitForCamera(cam);
         Vector3f rayBegin = new Vector3f(cam.getWorldCoordinates(midDisplayLocation, 0.0f));
         cursorRay = new Ray(rayBegin, cam.getDirection());
-        field.setTextOverTowers(cam);
+        //field.setTextOverTowers(cam);
+        field.rotateTextOverTowers(cam);
     }
     @Override
     public void simpleRender(RenderManager rm) {
